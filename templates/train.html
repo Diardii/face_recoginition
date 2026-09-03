@@ -1,0 +1,221 @@
+{% extends "layout.html" %}
+
+{% block title %}Train Model{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/train.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Judul -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Train Model</h2>
+            <p class="text-muted mb-0">
+                Generate embedding untuk Face Recognition
+            </p>
+        </div>
+    </div>
+
+    <!-- Summary Card -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Person</h6>
+                    <h2 id="totalPerson">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Dataset</h6>
+                    <h2 id="totalDataset">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Embedding</h6>
+                    <h2 id="totalEmbedding">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Model</h6>
+                    <h2>SFace</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Progress -->
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header">
+            <strong>Training Progress</strong>
+        </div>
+
+        <div class="card-body">
+
+            <p id="trainingStatus">
+                Belum Training
+            </p>
+
+            <div class="progress" style="height:25px">
+
+                <div
+                    id="trainingProgress"
+                    class="progress-bar progress-bar-striped progress-bar-animated"
+                    style="width:0%">
+
+                    0%
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Dataset Table -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header d-flex justify-content-between">
+
+            <strong>Dataset</strong>
+
+            <div>
+
+                <button
+                    class="btn btn-outline-primary"
+                    id="btnRefresh">
+
+                    Refresh
+
+                </button>
+
+                <button
+                    class="btn btn-success"
+                    id="btnTrainAll">
+
+                    Train Semua
+
+                </button>
+
+                <button
+                    class="btn btn-danger"
+                    id="btnDeleteEmbedding">
+
+                    Hapus Embedding
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Nama</th>
+
+                        <th>Dataset</th>
+
+                        <th>Status</th>
+
+                        <th>Aksi</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+{% for person in persons %}
+
+<tr>
+
+    <td>{{ person.person_id }}</td>
+
+    <td>{{ person.name }}</td>
+
+    <td>{{ person.dataset_count }}</td>
+
+    <td>
+
+        {% if person.status == "Ready" %}
+
+            <span class="badge bg-success">
+
+                Ready
+
+            </span>
+
+        {% else %}
+
+            <span class="badge bg-warning text-dark">
+
+                Belum Train
+
+            </span>
+
+        {% endif %}
+
+    </td>
+
+    <td>
+
+        <button
+            class="btn btn-primary btn-sm">
+
+            Train
+
+        </button>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/train.js') }}"></script>
+{% endblock %}

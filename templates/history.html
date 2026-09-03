@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="card shadow">
+
+    <div class="card-header">
+
+        <h4>Riwayat Absensi</h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-striped">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Nama</th>
+
+                    <th>Jenis</th>
+
+                    <th>Tanggal</th>
+
+                    <th>Jam</th>
+
+                    <th>Confidence</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for row in attendance %}
+
+                <tr>
+
+                    <td>{{ row.person_id }}</td>
+
+                    <td>{{ row.person_name }}</td>
+
+                    <td>{{ row.attendance_type }}</td>
+
+                    <td>{{ row.attendance_date }}</td>
+
+                    <td>{{ row.attendance_time }}</td>
+
+                    <td>{{ row.confidence }}%</td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+{% endblock %}

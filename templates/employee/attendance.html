@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Absensi</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 12px;
+            background: black;
+        }
+
+        .status {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 16px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a class="back"
+       href="/employee">
+        ← Kembali
+    </a>
+
+    <div class="card">
+
+        <h2>
+            Absen {{ attendance_type|capitalize }}
+        </h2>
+
+        <p>
+            {{ person["name"] }}
+        </p>
+
+        <p>
+            ID: {{ person["person_id"] }}
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <video
+            id="camera"
+            autoplay
+            playsinline
+            muted>
+        </video>
+
+        <div
+            id="status"
+            class="status">
+            Membuka kamera...
+        </div>
+        <button
+            id="captureButton"
+            type="button"
+            style="
+                width: 100%;
+                margin-top: 12px;
+                padding: 14px;
+                border: none;
+                border-radius: 10px;
+                background: #222;
+                color: white;
+            ">
+            Mulai Absensi
+        </button>
+
+        <canvas
+            id="canvas"
+            style="display:none;">
+        </canvas>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const video =
+    document.getElementById("camera");
+
+const statusText =
+    document.getElementById("status");
+
+const captureButton =
+    document.getElementById("captureButton");
+
+const canvas =
+    document.getElementById("canvas");
+
+let isRunning = false;
+let requestInProgress = false;
+let captureTimer = null;
+
+async function startCamera() {
+
+    statusText.innerText =
+        "Meminta izin kamera...";
+
+    try {
+
+        if (!navigator.mediaDevices ||
+            !navigator.mediaDevices.getUserMedia) {
+
+            statusText.innerText =
+                "Browser tidak mendukung akses kamera";
+
+            return;
+        }
+
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: false
+            });
+
+        statusText.innerText =
+            "Stream kamera diterima...";
+
+        video.srcObject = stream;
+
+        await video.play();
+
+        statusText.innerText =
+            "Kamera siap";
+
+    } catch (error) {
+
+        console.error(
+            "CAMERA ERROR:",
+            error.name,
+            error.message
+        );
+
+        statusText.innerText =
+            "Kamera gagal: " +
+            error.name +
+            " - " +
+            error.message;
+    }
+}
+
+
+async function sendFrame() {
+
+    if (!isRunning) {
+        return;
+    }
+
+    if (requestInProgress) {
+        return;
+    }
+
+    if (!video.videoWidth || !video.videoHeight) {
+        statusText.innerText =
+            "Kamera belum siap";
+        return;
+    }
+
+    requestInProgress = true;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context =
+        canvas.getContext("2d");
+
+    context.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const imageData =
+        canvas.toDataURL(
+            "image/jpeg",
+            0.85
+        );
+
+    try {
+
+        const response = await fetch(
+            "/employee/attendance/capture",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    image: imageData,
+                    attendance_type:
+                        "{{ attendance_type }}"
+                })
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if (result.message) {
+            statusText.innerText =
+                result.message;
+        }
+
+        if (
+            result.status === "success"
+        ) {
+
+            stopAutoCapture();
+
+            captureButton.innerText =
+                "Selesai";
+
+            captureButton.disabled =
+                true;
+
+            return;
+        }
+
+        if (
+            result.status === "error"
+        ) {
+
+            stopAutoCapture();
+
+            captureButton.innerText =
+                "Coba Lagi";
+
+            captureButton.disabled =
+                false;
+
+            return;
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        statusText.innerText =
+            "Gagal terhubung ke server";
+
+        stopAutoCapture();
+
+        captureButton.innerText =
+            "Coba Lagi";
+
+        captureButton.disabled =
+            false;
+
+    } finally {
+
+        requestInProgress = false;
+    }
+}
+
+
+function startAutoCapture() {
+
+    if (isRunning) {
+        return;
+    }
+
+    if (!video.videoWidth || !video.videoHeight) {
+
+        statusText.innerText =
+            "Kamera belum siap";
+
+        return;
+    }
+
+    isRunning = true;
+
+    captureButton.innerText =
+        "Memproses...";
+
+    captureButton.disabled =
+        true;
+
+    statusText.innerText =
+        "Memulai verifikasi...";
+
+    sendFrame();
+
+    captureTimer = setInterval(
+        sendFrame,
+        700
+    );
+}
+
+
+function stopAutoCapture() {
+
+    isRunning = false;
+
+    if (captureTimer) {
+
+        clearInterval(captureTimer);
+
+        captureTimer = null;
+    }
+}
+
+
+captureButton.addEventListener(
+    "click",
+    function () {
+
+        startAutoCapture();
+    }
+);
+
+
+startCamera();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<input
+    type="file"
+    id="fileUpload"
+    accept="image/*"
+    multiple
+    hidden>
+
+<div class="mb-3">
+
+    <button
+        id="btnUpload"
+        class="btn btn-primary">
+
+        Upload Dataset
+
+    </button>
+
+    <button
+        id="btnDeleteLast"
+        class="btn btn-danger">
+
+        Delete Last
+
+    </button>
+
+</div>
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="mb-0">
+
+                <i class="bi bi-person-plus-fill"></i>
+
+                Tambah Person
+
+            </h3>
+
+            <small class="text-muted">
+
+                Tambahkan dataset wajah baru.
+
+            </small>
+
+        </div>
+
+        <a
+            href="/persons"
+            class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Kembali
+
+        </a>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Camera -->
+
+        <div class="col-lg-5">
+
+            <div class="card shadow">
+
+                <div class="card-header">
+
+                    Live Camera
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="camera-preview">
+
+                        <img
+                            id="cameraPreview"
+                            class="img-fluid rounded"
+                            src="">
+
+                    </div>
+
+                    <div class="mt-3 d-flex gap-2">
+
+                        <button
+                            id="btnStartCamera"
+                            class="btn btn-success">
+
+                            Start
+
+                        </button>
+
+                        <button
+                            id="btnStopCamera"
+                            class="btn btn-danger">
+
+                            Stop
+
+                        </button>
+
+                        <button
+                            id="btnCapture"
+                            class="btn btn-primary">
+
+                            Capture
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Form -->
+
+        <div class="col-lg-7">
+
+            <div class="card shadow">
+
+                <div class="card-header">
+
+                    Informasi Person
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="mb-3">
+
+                        <label>ID Person</label>
+
+                        <input
+                            id="personID"
+                            class="form-control"
+                            readonly>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Nama</label>
+
+                        <input
+                            id="personName"
+                            class="form-control">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Jenis Kelamin</label>
+
+                        <select
+                            id="personGender"
+                            class="form-select">
+
+                            <option>Laki-laki</option>
+                            <option>Perempuan</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>Divisi</label>
+
+                        <input
+                            id="personDivision"
+                            class="form-control">
+
+                    </div>
+
+                    <button
+                        id="btnSavePerson"
+                        class="btn btn-success w-100">
+
+                        Simpan Person
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Dataset -->
+
+        <div class="col-12">
+
+            <div class="card shadow">
+
+                <div class="card-header d-flex justify-content-between">
+
+                    <span>Dataset</span>
+
+                    <span id="photoCount">
+
+                        0 / 20 Foto
+
+                    </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div
+                        id="datasetGrid"
+                        class="dataset-grid">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='js/person_add.js') }}"></script>
+
+{% endblock %}

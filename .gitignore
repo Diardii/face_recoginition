@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Dataset / personal images
+dataset/
+attendance_images/
+
+# Models
+models/
+
+# Database
+database/
+
+# Logs
+*.log
+
+# Certificates / secrets
+cert/
+
+# Temporary / backup files
+*.save
+*.save.*
+*.before-*
+*.after-*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+*.jpg
+*.jpeg
+*.png

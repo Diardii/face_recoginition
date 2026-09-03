@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Edit Person
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+
+                    <h4 class="mb-0">
+                        Edit Person
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                ID Person
+                            </label>
+
+                            <input
+                                type="text"
+                                id="personID"
+                                class="form-control"
+                                value="{{ person.person_id }}"
+                                readonly>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Nama Lengkap
+                            </label>
+
+                            <input
+                                type="text"
+                                id="personName"
+                                class="form-control"
+                                value="{{ person.name }}">
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Jenis Kelamin
+                            </label>
+
+                            <select
+                                id="personGender"
+                                class="form-select">
+
+                                <option value="Laki-laki"
+                                    {% if person.gender == "Laki-laki" %}selected{% endif %}>
+                                    Laki-laki
+                                </option>
+
+                                <option value="Perempuan"
+                                    {% if person.gender == "Perempuan" %}selected{% endif %}>
+                                    Perempuan
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+                                Divisi
+                            </label>
+
+                            <input
+                                type="text"
+                                id="personDivision"
+                                class="form-control"
+                                value="{{ person.division }}">
+
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <a
+                            href="{{ url_for('persons') }}"
+                            class="btn btn-secondary">
+
+                            Batal
+
+                        </a>
+
+                        <button
+                            id="btnSave"
+                            class="btn btn-success">
+
+                            <i class="fas fa-save"></i>
+                            Simpan Perubahan
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='js/person_edit.js') }}"></script>
+
+{% endblock %}

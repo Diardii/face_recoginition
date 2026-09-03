@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Employee</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .menu {
+            display: grid;
+            gap: 12px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 16px;
+            text-decoration: none;
+            background: #eeeeee;
+            color: #222222;
+            border-radius: 10px;
+        }
+
+        .logout {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h2>
+            Halo, {{ person["name"] }}
+        </h2>
+
+        <p>
+            ID: {{ person["person_id"] }}
+        </p>
+
+        <p>
+            Divisi: {{ person["division"] }}
+        </p>
+
+        <p>
+           Status Wajah: {{ person["status"] }}
+        </p>
+         
+        <p>
+           Jumlah Dataset: {{ person["dataset_count"] }}
+        </p>
+ 
+    </div>
+
+    <div class="card menu">
+
+        <a href="/employee/register-face">
+            Registrasi Wajah
+        </a>
+
+        <a href="/employee/attendance/masuk">
+            Absen Masuk
+        </a>
+
+        <a href="/employee/attendance/pulang">
+            Absen Pulang
+        </a>
+
+        <a href="/employee/history">
+            Riwayat Absensi
+        </a>
+
+        <a class="logout"
+           href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

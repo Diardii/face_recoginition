@@ -1,0 +1,388 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h3 class="mb-0">Camera Realtime</h3>
+
+        <small class="text-muted">
+            Monitoring dan Face Recognition secara realtime
+        </small>
+
+    </div>
+
+    <div>
+
+        <button
+            class="btn btn-outline-secondary me-2"
+            id="btnRefreshCamera">
+
+            <i class="bi bi-arrow-clockwise"></i>
+
+            Refresh
+
+        </button>
+
+		<button
+			class="btn btn-dark"
+			id="btnCameraSetting"
+			data-bs-toggle="modal"
+			data-bs-target="#modalCameraSetting">
+
+            <i class="bi bi-gear-fill"></i>
+
+            Settings
+
+        </button>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <!-- Camera Preview -->
+
+    <div class="col-lg-8">
+
+        <div class="card shadow">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+
+        <span>
+
+            <i class="bi bi-camera-video-fill"></i>
+
+            Live Camera
+
+        </span>
+
+        <span class="badge bg-danger" id="cameraBadge">
+
+            Offline
+
+        </span>
+
+    </div>
+
+    <div class="card-body p-2">
+
+        <div
+    id="cameraContainer"
+    class="bg-dark rounded overflow-hidden"
+    style="height:520px;">
+
+	<video
+    id="cameraPreview"
+    class="w-100 h-100"
+    autoplay
+    playsinline
+    muted
+    style="object-fit:cover; display:none;">
+</video>
+    <div
+        id="cameraPlaceholder"
+        class="d-flex justify-content-center align-items-center h-100">
+
+        <span class="text-secondary fs-5">
+
+            Kamera belum dijalankan
+
+        </span>
+
+    </div>
+
+</div>
+
+    </div>
+
+</div>
+
+    </div>
+
+    <!-- Camera Information -->
+
+    <div class="col-lg-4">
+
+        <div class="card shadow">
+
+            <div class="card-header">
+
+                Informasi Kamera
+
+            </div>
+
+            <div class="card-body">
+
+                <table class="table table-borderless mb-0">
+
+                    <tr>
+
+                        <th>Status</th>
+
+                        <td>
+                            <span class="badge bg-danger">
+
+                                Tidak Aktif
+
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Camera</th>
+
+                        <td>-</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Person</th>
+
+                        <td>-</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Confidence</th>
+
+                        <td>-</td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>FPS</th>
+
+                        <td>0</td>
+
+                    </tr>
+
+                </table>
+
+                <hr>
+
+                <button
+                    class="btn btn-success w-100 mb-2"
+					id="btnStartCamera">
+
+                    <i class="bi bi-play-fill"></i>
+
+                    Start Camera
+
+                </button>
+
+                <button
+                    class="btn btn-danger w-100"
+					id="btnStopCamera">
+
+                    <i class="bi bi-stop-fill"></i>
+
+                    Stop Camera
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ==========================================
+     Modal Camera Settings
+========================================== -->
+
+<div class="modal fade"
+     id="modalCameraSetting"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content custom-modal">
+
+            <div class="modal-header custom-modal-header">
+
+                <h5 class="modal-title">
+
+                    Camera Settings
+
+                </h5>
+
+                <button
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Pilih Kamera
+
+                            </label>
+
+                            <select
+                                id="cameraSelect"
+                                class="form-select">
+
+                                <option>
+                                    Belum ada kamera
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Resolusi
+
+                            </label>
+
+                            <select
+                                id="resolutionSelect"
+                                class="form-select">
+
+                                <option value="640x480">
+
+                                    640 × 480
+
+                                </option>
+
+                                <option
+                                    value="1280x720"
+                                    selected>
+
+                                    1280 × 720
+
+                                </option>
+
+                                <option value="1920x1080">
+
+                                    1920 × 1080
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                FPS
+
+                            </label>
+
+                            <select
+                                id="fpsSelect"
+                                class="form-select">
+
+                                <option>15</option>
+
+                                <option selected>30</option>
+
+                                <option>60</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Mirror Camera
+
+                            </label>
+
+                            <div class="form-check form-switch mt-2">
+
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="mirrorCamera"
+                                    checked>
+
+                                <label
+                                    class="form-check-label">
+
+                                    Aktif
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Batal
+
+                </button>
+
+                <button
+                    class="btn btn-success"
+                    id="btnSaveCameraSetting">
+
+                    Simpan
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Riwayat Absensi</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 16px;
+            text-decoration: none;
+        }
+
+        .type {
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a class="back"
+       href="/employee">
+        ← Kembali
+    </a>
+
+    <h2>Riwayat Absensi</h2>
+
+    {% if attendance %}
+
+        {% for row in attendance %}
+
+            <div class="card">
+
+                <div class="type">
+                    {{ row["attendance_type"] }}
+                </div>
+
+                <div>
+                    Tanggal:
+                    {{ row["attendance_date"] }}
+                </div>
+
+                <div>
+                    Jam:
+                    {{ row["attendance_time"] }}
+                </div>
+
+                <div>
+                    Confidence:
+                    {{ row["confidence"] }}
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="card empty">
+            Belum ada riwayat absensi.
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

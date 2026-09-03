@@ -1,0 +1,736 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h3>Data Person</h3>
+
+<a href="/persons/new" class="btn btn-success">
+
+    <i class="bi bi-person-plus-fill"></i>
+
+    Tambah Person
+
+</a>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <div class="row mb-3">
+
+            <div class="col-md-4">
+
+                <input
+					type="text"
+					id="searchPerson"
+					class="form-control"
+					placeholder="Cari ID Person atau Nama">
+
+            </div>
+
+        </div>
+
+<div class="table-responsive custom-table">
+
+    <table class="table table-hover align-middle mb-0">
+
+			<thead class="table-header-custom">	
+
+			<tr>
+
+				<th>No</th>
+
+				<th>Dataset</th>
+
+				<th>ID Person</th>
+
+				<th>Nama</th>
+
+				<th>Jumlah Dataset</th>
+
+				<th>Status</th>
+
+				<th width="220">Aksi</th>
+
+			</tr>
+
+			</thead>
+
+<tbody>
+
+{% for person in persons %}
+
+<tr class="person-row">
+
+    <td>{{ loop.index }}</td>
+
+    <td>
+        <i class="bi bi-images text-primary fs-4"></i>
+    </td>
+
+    <td class="person-id">{{ person["person_id"] }}</td>
+
+    <td class="person-name">{{ person["name"] }}</td>
+
+    <td>
+        <span class="badge bg-primary">
+            {{ person["dataset_count"] }} Dataset
+        </span>
+    </td>
+
+    <td>
+        {% if person["status"] == "Siap" %}
+            <span class="badge bg-success">
+                {{ person["status"] }}
+            </span>
+        {% else %}
+            <span class="badge bg-warning text-dark">
+                {{ person["status"] }}
+            </span>
+        {% endif %}
+    </td>
+
+    <td>
+
+    <div class="action-buttons">
+
+    <button
+        class="btn btn-info btn-sm btnDetail"
+        data-id="{{ person['person_id'] }}">
+        <i class="bi bi-eye-fill"></i>
+    </button>
+
+  <a href="/persons/{{ person.person_id }}/edit"
+   class="btn btn-warning">
+    Edit
+</a>
+	
+    <button
+        class="btn btn-success btn-sm btnDataset"
+        data-id="{{ person['person_id'] }}"
+        data-name="{{ person['name'] }}"
+        title="Kelola Dataset">
+
+        <i class="bi bi-camera-fill"></i>
+
+    </button>
+
+<button
+    class="btn btn-danger"
+    onclick="deletePerson('{{ person.person_id }}')">
+
+    Hapus
+
+</button>
+
+</div>
+
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+    <td colspan="7" class="text-center text-muted">
+        Belum ada data person.
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+        </table>
+
+    </div>
+
+</div>
+<!-- Modal Tambah Person -->
+<div class="modal fade" id="modalTambahPerson" tabindex="-1">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+		<div class="modal-content custom-modal">
+            <div class="modal-header bg-dark text-white">
+
+                <h4 class="modal-title">
+
+                    Tambah Person
+
+                </h4>
+
+                <button class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <!-- Informasi Person -->
+
+                    <div class="col-lg-4">
+
+                        <div class="card shadow-sm">
+
+                            <div class="card-header">
+
+                                Informasi Person
+
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="mb-3">
+
+                                    <label>ID Person</label>
+									<input
+										id="personID"
+										type="text"
+										class="form-control"
+										readonly>
+
+                                </div>
+
+                                <div class="mb-3">
+
+                                    <label>Nama Lengkap</label>
+
+                                    <input
+										id="personName"
+										type="text"
+										class="form-control">
+
+                                </div>
+
+                                <div class="mb-3">
+
+                                    <label>Jenis Kelamin</label>
+
+								<select
+									id="personGender"
+									class="form-select">
+
+									<option value="Laki-laki">Laki-laki</option>
+
+									<option value="Perempuan">Perempuan</option>
+
+								</select>
+
+                                </div>
+
+                                <div class="mb-3">
+
+                                    <label>Divisi</label>
+
+								<input
+									id="personDivision"
+									type="text"
+									class="form-control">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Dataset -->
+
+                    <div class="col-lg-8">
+
+                        <div class="card shadow-sm">
+
+                            <div class="card-header d-flex justify-content-between">
+
+                                <span>Dataset Wajah</span>
+
+							<span
+								class="badge bg-primary"
+								id="photoCount">
+
+								0 / 20 Foto
+
+							</span>
+
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="mb-3">
+
+								<button
+									class="btn btn-primary"
+									id="btnUploadDataset">
+
+									<i class="bi bi-cloud-upload-fill"></i>
+
+									Upload Dataset
+
+								</button>
+								<input
+									type="file"
+									id="fileUpload"
+									accept="image/*"
+									multiple
+									hidden>
+                                </div>
+								<div class="camera-preview">
+
+									<video
+										id="video"
+										autoplay
+										playsinline
+										muted
+										style="width:100%;
+											   height:100%;
+											   object-fit:cover;
+											   border-radius:12px;">
+									</video>
+
+								</div>
+
+								<canvas id="canvas" style="display:none;"></canvas>
+                                
+                                <div class="mt-3 d-flex flex-wrap gap-2">
+
+									<!-- Mulai Kamera -->
+									<button
+										class="btn btn-camera"
+										id="btnStartCamera">
+
+										<i class="bi bi-camera-video-fill"></i>
+										Mulai Kamera
+
+									</button>
+
+									<!-- Stop Kamera -->
+									<button
+										class="btn btn-secondary"
+										id="btnStopCamera">
+
+										<i class="bi bi-stop-circle-fill"></i>
+										Stop
+
+									</button>
+
+									<!-- Capture -->
+									<button
+										class="btn btn-masuk"
+										id="btnCapture"
+										disabled>
+
+										<i class="bi bi-camera-fill"></i>
+										Ambil Foto
+
+									</button>
+
+
+									<!-- Hapus Terakhir -->
+									<button
+										class="btn btn-danger"
+										id="btnDeleteLast"
+										disabled>
+
+										<i class="bi bi-trash-fill"></i>
+										Hapus
+
+									</button>
+
+								</div>
+
+                                <hr>
+
+                                <h6>
+
+                                    Dataset Tersimpan
+
+                                </h6>
+
+                                <div
+									class="dataset-grid"
+									id="datasetGrid">
+
+									<div class="text-muted">
+
+										Belum ada dataset
+
+									</div>
+
+								</div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Tutup
+
+                </button>
+
+				<button
+					class="btn btn-success"
+					id="btnSavePerson">
+
+					Simpan Person
+
+				</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ==========================
+     Modal Detail Person
+========================== -->
+<div class="modal fade" id="modalDetailPerson" tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+		<div class="modal-content custom-modal">
+			<div class="modal-header custom-modal-header">
+                <h5 class="modal-title">
+
+                    Detail Person
+
+                </h5>
+
+                <button
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <table class="table table-borderless">
+
+                    <tr>
+                        <th width="180">ID Person</th>
+                        <td id="detailPersonID"></td>
+                    </tr>
+
+                    <tr>
+                        <th>Nama</th>
+                        <td id="detailPersonName"></td>
+                    </tr>
+
+                    <tr>
+                        <th>Jenis Kelamin</th>
+                        <td id="detailGender"></td>
+                    </tr>
+
+                    <tr>
+                        <th>Divisi</th>
+                        <td id="detailDivision"></td>
+                    </tr>
+
+                    <tr>
+                        <th>Dataset</th>
+                        <td id="detailDataset"></td>
+                    </tr>
+
+                    <tr>
+                        <th>Status</th>
+                        <td id="detailStatus"></td>
+                    </tr>
+
+                    <tr>
+                        <th>Dibuat</th>
+                        <td id="detailCreated"></td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="modal fade"
+     id="modalDataset"
+     tabindex="-1">
+
+<div class="modal-dialog modal-xl modal-dialog-centered">
+
+<div class="modal-content custom-modal">
+
+<div class="modal-header custom-modal-header">
+
+<h5 class="modal-title">
+
+Dataset Person
+
+</h5>
+
+<button
+class="btn-close btn-close-white"
+data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<h5 id="datasetPersonName"></h5>
+
+<hr>
+
+<div class="mb-3 d-flex gap-2">
+
+    <button
+        class="btn btn-primary"
+        id="btnUploadNewDataset">
+
+        <i class="bi bi-upload"></i>
+        Upload
+
+    </button>
+
+    <button
+        class="btn btn-success"
+        id="btnStartDatasetCamera">
+
+        <i class="bi bi-camera-video"></i>
+        Start Camera
+
+    </button>
+
+    <button
+        class="btn btn-warning"
+        id="btnCaptureDataset"
+        disabled>
+
+        <i class="bi bi-camera"></i>
+        Capture
+
+    </button>
+
+    <button
+        class="btn btn-danger"
+        id="btnStopDatasetCamera"
+        disabled>
+
+        Stop
+
+    </button>
+
+</div>
+
+<input
+    type="file"
+    id="datasetUpload"
+    accept="image/*"
+    multiple
+    hidden>
+
+<video
+    id="datasetVideo"
+    class="w-100 rounded mb-3"
+    autoplay
+    playsinline
+    style="display:none;">
+</video>
+
+<canvas
+    id="datasetCanvas"
+    hidden>
+</canvas>
+
+<div
+    class="dataset-grid"
+    id="datasetPersonGrid">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="modal fade" id="modalDeletePerson" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content custom-modal">
+
+            <div class="modal-header custom-modal-header">
+
+                <h5 class="modal-title">
+                    Hapus Person
+                </h5>
+
+                <button class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body text-center">
+
+                <i class="bi bi-trash-fill text-danger"
+                   style="font-size:60px;"></i>
+
+                <h5 class="mt-3">
+                    Yakin ingin menghapus?
+                </h5>
+
+                <p class="text-muted">
+                    Data <strong id="deletePersonName"></strong><br>
+                    akan dihapus beserta seluruh dataset wajahnya.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    Batal
+
+                </button>
+
+                <button class="btn btn-danger"
+                        id="btnConfirmDelete">
+
+                    Hapus
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- ==========================
+     Modal Edit Person
+========================== -->
+<div class="modal fade" id="modalEditPerson" tabindex="-1">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content custom-modal">
+
+            <div class="modal-header custom-modal-header">
+
+                <h5 class="modal-title">
+                    Edit Person
+                </h5>
+
+                <button
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+
+                    <label>ID Person</label>
+
+                    <input
+                        id="editPersonID"
+                        class="form-control"
+                        readonly>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Nama Lengkap</label>
+
+                    <input
+                        id="editPersonName"
+                        class="form-control">
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Jenis Kelamin</label>
+
+                    <select
+                        id="editPersonGender"
+                        class="form-select">
+
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Divisi</label>
+
+                    <input
+                        id="editPersonDivision"
+                        class="form-control">
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+
+                    Batal
+
+                </button>
+
+                <button
+                    class="btn btn-success"
+                    id="btnUpdatePerson">
+
+                    Simpan Perubahan
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/persons.js') }}"></script>
+{% endblock %}

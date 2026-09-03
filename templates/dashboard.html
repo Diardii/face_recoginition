@@ -1,0 +1,278 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row">
+
+    <!-- Live Camera -->
+    <div class="col-lg-8">
+
+        <div class="card shadow">
+
+            <div class="card-header">
+                <h5 class="mb-0">Live Camera</h5>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Area Kamera -->
+                <div class="camera-box">
+
+<img
+    id="attendanceVideo"
+    src=""
+    style="
+        display:none;
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        border-radius:12px;">
+
+    <div id="cameraPlaceholder">
+
+        <i class="bi bi-camera-video-off fs-1"></i>
+
+        <h4 class="mt-3">
+            Kamera Belum Aktif
+        </h4>
+
+    </div>
+
+</div>
+
+                <!-- Tombol -->
+				<div class="mt-3 d-flex gap-2 flex-wrap">
+
+					<button
+						id="btnStartCamera"
+						class="btn btn-success">
+
+						<i class="bi bi-play-fill"></i>
+
+						Start
+
+					</button>
+
+					<button
+						id="btnStopCamera"
+						class="btn btn-danger"
+						disabled>
+
+						<i class="bi bi-stop-fill"></i>
+
+						Stop
+
+					</button>
+
+					<button
+						id="btnMasuk"
+						class="btn btn-masuk">
+
+						💼 Absen Masuk
+
+					</button>
+
+					<button
+						id="btnPulang"
+						class="btn btn-pulang">
+
+						🏠 Absen Pulang
+
+					</button>
+
+					<button
+						id="btnSnapshot"
+						class="btn btn-camera">
+
+						📷 Snapshot
+
+					</button>
+
+				</div>
+
+                <!-- Status -->
+                <div class="alert alert-info mt-3 mb-0">
+
+                    <strong>Status :</strong>
+
+                    <span id="modeAbsen">
+
+                        Belum memilih jenis absensi
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Panel Kanan -->
+    <div class="col-lg-4">
+
+        <div class="card shadow mb-3">
+
+            <div class="card-header">
+
+                <h5 class="mb-0">
+                    Hasil Deteksi
+                </h5>
+
+            </div>
+
+        
+
+			<div class="card-body">
+
+				<div class="text-center mb-3">
+
+					<img
+						id="detectedFace"
+						src="{{ url_for('static', filename='img/no-face.png') }}"
+						class="rounded-circle border"
+						width="120"
+						height="120">
+
+				</div>
+
+				<p>
+					<strong>Nama :</strong>
+					<span id="detectName">-</span>
+				</p>
+
+				<p>
+					<strong>ID :</strong>
+					<span id="detectID">-</span>
+				</p>
+
+				<p>
+					<strong>Confidence :</strong>
+					<span id="detectConfidence">-</span>
+				</p>
+
+				<p>
+					<strong>Status :</strong>
+					<span id="detectStatus">Menunggu</span>
+				</p>
+				
+				<hr>
+
+				<div id="livenessPanel">
+
+    				     <h6 class="mb-3">
+        				 Tantangan Liveness
+    				     </h6>
+
+    				     <p>
+        				 <strong>Instruksi :</strong>
+        				 <span id="livenessInstruction">
+            				     Menunggu wajah dikenali
+        				 </span>
+    				     </p>
+
+   				     <p>
+        				 <strong>Arah Terdeteksi :</strong>
+        				 <span id="livenessDirection">
+            				     UNKNOWN
+        				 </span>
+    				     </p>
+
+    				     <p>
+        				 <strong>Progress :</strong>
+        				 <span id="livenessProgress">
+            				     0/4
+        				 </span>
+    				     </p>
+
+    				     <p>
+        				 <strong>Sisa Waktu :</strong>
+        				 <span id="livenessRemaining">
+            				     0 detik
+        				 </span>
+    				     </p>
+
+    				     <p class="mb-0">
+        				<strong>Status Liveness :</strong>
+        				<span
+            				    id="livenessState"
+            				    class="badge bg-secondary">
+
+            				    IDLE
+
+      			  		</span>
+    				     </p>
+
+    				     <div
+        				  id="livenessMessage"
+        				  class="small text-muted mt-2">
+
+        				  -
+
+    				     </div>
+
+				 </div>
+
+            </div>
+
+        </div>
+
+        <div class="card shadow">
+
+            <div class="card-header">
+
+                <h5 class="mb-0">
+                    Status Kamera
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+    <p>
+
+        FPS :
+        <span id="cameraFPS">0</span>
+
+    </p>
+
+    <p>
+
+        Jumlah Wajah :
+        <span id="faceCount">0</span>
+
+    </p>
+
+    <p>
+
+        Resolusi :
+        <span id="cameraResolution">-</span>
+
+    </p>
+
+    <p>
+
+        Kamera :
+        <span
+            id="cameraStatus"
+            class="badge bg-danger">
+
+            Offline
+
+        </span>
+
+    </p>
+
+</div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
