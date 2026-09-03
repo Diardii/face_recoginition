@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -8,316 +10,2341 @@
 
     <title>Registrasi Wajah</title>
 
+
+    <!-- =====================================================
+         BOOTSTRAP
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- =====================================================
+         BOOTSTRAP ICONS
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet">
+
+
     <style>
+
+        /* =====================================================
+           GLOBAL
+        ====================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
         body {
+
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+
+            min-height: 100vh;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 0% 0%,
+                    rgba(161, 140, 209, 0.18),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 100% 100%,
+                    rgba(251, 194, 235, 0.18),
+                    transparent 32%
+                ),
+                #f1f3f7;
+
+            color: #302d3d;
+
         }
 
-        .container {
-            max-width: 480px;
-            margin: auto;
-            padding: 20px;
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
+        .topbar {
+
+            height: 72px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding:
+                0 30px;
+
+            background:
+                rgba(255,255,255,0.88);
+
+            border-bottom:
+                1px solid rgba(220,215,227,0.7);
+
+            backdrop-filter:
+                blur(16px);
+
+            -webkit-backdrop-filter:
+                blur(16px);
+
         }
 
-        .card {
-            background: white;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
 
-        video {
-            width: 100%;
-            border-radius: 12px;
-            background: black;
-        }
+        .brand {
 
-        .status {
-            margin-top: 12px;
-            text-align: center;
-        }
+            display: flex;
 
-        .back {
-            display: inline-block;
-            margin-bottom: 16px;
+            align-items: center;
+
+            gap: 11px;
+
+            color: #2e2a3a;
+
             text-decoration: none;
+
         }
+
+
+        .brand-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 13px;
+
+            color: white;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8f72d5,
+                    #c96ee8
+                );
+
+            box-shadow:
+                0 7px 20px
+                rgba(143,114,213,0.25);
+
+        }
+
+
+        .brand-title {
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+            line-height: 1.1;
+
+        }
+
+
+        .brand-subtitle {
+
+            margin-top: 3px;
+
+            color: #9893a2;
+
+            font-size: 9px;
+
+        }
+
+
+        .user-section {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+        }
+
+
+        .user-information {
+
+            text-align: right;
+
+        }
+
+
+        .user-name {
+
+            color: #393443;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+        }
+
+
+        .user-role {
+
+            margin-top: 2px;
+
+            color: #9b96a4;
+
+            font-size: 9px;
+
+        }
+
+
+        .user-avatar {
+
+            width: 40px;
+
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8f72d5,
+                    #c96ee8
+                );
+
+        }
+
+
+        /* =====================================================
+           MAIN
+        ====================================================== */
+
+        .main-container {
+
+            width: min(1180px, 100%);
+
+            margin: auto;
+
+            padding:
+                35px 20px 55px;
+
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ====================================================== */
+
+        .back-button {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-bottom: 25px;
+
+            padding:
+                9px 14px;
+
+            border:
+                1px solid #e2dee8;
+
+            border-radius: 11px;
+
+            color: #706b79;
+
+            background:
+                rgba(255,255,255,0.85);
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            transition: 0.2s ease;
+
+        }
+
+
+        .back-button:hover {
+
+            color: #805fd1;
+
+            border-color: #cfc3e8;
+
+            transform:
+                translateY(-1px);
+
+        }
+
+
+        /* =====================================================
+           PAGE HEADER
+        ====================================================== */
+
+        .page-label {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 7px;
+
+            color: #8f72d5;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.8px;
+
+        }
+
+
+        .page-title {
+
+            margin: 0;
+
+            color: #292638;
+
+            font-size:
+                clamp(28px, 4vw, 38px);
+
+            font-weight: 750;
+
+            line-height: 1.15;
+
+        }
+
+
+        .page-title span {
+
+            color: #9b67dc;
+
+        }
+
+
+        .page-description {
+
+            max-width: 700px;
+
+            margin:
+                9px 0 27px;
+
+            color: #85808e;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           GRID
+        ====================================================== */
+
+        .content-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.45fr)
+                minmax(285px, 0.75fr);
+
+            gap: 20px;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ====================================================== */
+
+        .card-custom {
+
+            border:
+                1px solid rgba(255,255,255,0.95);
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,0.91);
+
+            box-shadow:
+                0 18px 45px
+                rgba(48,40,70,0.08);
+
+        }
+
+
+        /* =====================================================
+           CAMERA CARD
+        ====================================================== */
+
+        .camera-card {
+
+            padding: 18px;
+
+        }
+
+
+        .camera-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 14px;
+
+        }
+
+
+        .camera-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #393443;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+        }
+
+
+        .camera-title i {
+
+            color: #9677d7;
+
+            font-size: 16px;
+
+        }
+
+
+        .live-status {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding:
+                6px 10px;
+
+            border-radius: 9px;
+
+            color: #6f6a78;
+
+            background: #f7f4fa;
+
+            font-size: 9px;
+
+        }
+
+
+        .live-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #42b883;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(66,184,131,0.12);
+
+        }
+
+
+        /* =====================================================
+           CAMERA WRAPPER
+        ====================================================== */
+
+        .camera-wrapper {
+
+            position: relative;
+
+            overflow: hidden;
+
+            width: 100%;
+
+            height: 450px;
+
+            border-radius: 18px;
+
+            background: #15131b;
+
+        }
+
+
+        #camera {
+
+            width: 100%;
+
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+
+            /*
+             * Mirror camera seperti kamera depan.
+             */
+
+            transform:
+                scaleX(-1);
+
+        }
+
+
+        /* =====================================================
+           OVAL FACE GUIDE
+        ====================================================== */
+
+        .face-guide {
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 50%;
+
+            width: 250px;
+
+            height: 335px;
+
+            transform:
+                translate(-50%, -50%);
+
+            border:
+                3px solid
+                rgba(255,255,255,0.92);
+
+            border-radius: 50%;
+
+            /*
+             * Tidak menghalangi kamera.
+             */
+
+            pointer-events: none;
+
+            /*
+             * Bayangan lembut di sekitar oval.
+             */
+
+            box-shadow:
+
+                0 0 20px
+                rgba(255,255,255,0.15),
+
+                0 0 0 9999px
+                rgba(0,0,0,0.10);
+
+        }
+
+
+        /* =====================================================
+           CORNERS
+        ====================================================== */
+
+        .corner {
+
+            position: absolute;
+
+            width: 25px;
+
+            height: 25px;
+
+            border-color: rgba(255,255,255,0.95);
+
+            border-style: solid;
+
+            pointer-events: none;
+
+        }
+
+
+        .corner-top-left {
+
+            top: 25px;
+
+            left: 25px;
+
+            border-width:
+                3px 0 0 3px;
+
+            border-radius:
+                8px 0 0 0;
+
+        }
+
+
+        .corner-top-right {
+
+            top: 25px;
+
+            right: 25px;
+
+            border-width:
+                3px 3px 0 0;
+
+            border-radius:
+                0 8px 0 0;
+
+        }
+
+
+        .corner-bottom-left {
+
+            bottom: 25px;
+
+            left: 25px;
+
+            border-width:
+                0 0 3px 3px;
+
+            border-radius:
+                0 0 0 8px;
+
+        }
+
+
+        .corner-bottom-right {
+
+            bottom: 25px;
+
+            right: 25px;
+
+            border-width:
+                0 3px 3px 0;
+
+            border-radius:
+                0 0 8px 0;
+
+        }
+
+
+        /* =====================================================
+           CENTER DOT
+        ====================================================== */
+
+        .center-dot {
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 50%;
+
+            width: 7px;
+
+            height: 7px;
+
+            transform:
+                translate(-50%, -50%);
+
+            border-radius: 50%;
+
+            background: white;
+
+            opacity: 0.7;
+
+            pointer-events: none;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+        ====================================================== */
+
+        #status {
+
+            min-height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-top: 13px;
+
+            padding:
+                10px 15px;
+
+            border:
+                1px solid #eeeaf3;
+
+            border-radius: 12px;
+
+            color: #6e6977;
+
+            background: #f8f6fa;
+
+            font-size: 11px;
+
+            text-align: center;
+
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ====================================================== */
+
+        #captureButton {
+
+            width: 100%;
+
+            min-height: 54px;
+
+            margin-top: 11px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7655e9,
+                    #c95ee9
+                );
+
+            box-shadow:
+                0 9px 23px
+                rgba(118,85,233,0.23);
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                opacity 0.2s ease;
+
+        }
+
+
+        #captureButton:hover:not(:disabled) {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 27px
+                rgba(118,85,233,0.30);
+
+        }
+
+
+        #captureButton:active:not(:disabled) {
+
+            transform:
+                translateY(0);
+
+        }
+
+
+        #captureButton:disabled {
+
+            opacity: 0.7;
+
+            cursor: not-allowed;
+
+        }
+
+
+        /* =====================================================
+           TIPS
+        ====================================================== */
+
+        .tips-box {
+
+            margin-top: 14px;
+
+            padding:
+                14px 15px;
+
+            border:
+                1px solid #eee8f5;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fbf9fe,
+                    #f8f3fb
+                );
+
+        }
+
+
+        .tips-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 7px;
+
+            color: #6951a4;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .tips-title i {
+
+            color: #9b72d8;
+
+        }
+
+
+        .tips-text {
+
+            margin: 0;
+
+            color: #8b8694;
+
+            font-size: 10px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           PERSON CARD
+        ====================================================== */
+
+        .person-card {
+
+            padding: 23px;
+
+        }
+
+
+        .person-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            margin-bottom: 24px;
+
+        }
+
+
+        .person-icon {
+
+            width: 44px;
+
+            height: 44px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 13px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8f72d5,
+                    #c96ee8
+                );
+
+        }
+
+
+        .person-header h2 {
+
+            margin: 0;
+
+            color: #393443;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+        }
+
+
+        .person-header p {
+
+            margin:
+                3px 0 0;
+
+            color: #9c97a5;
+
+            font-size: 9px;
+
+        }
+
+
+        /* =====================================================
+           INFORMATION
+        ====================================================== */
+
+        .info-item {
+
+            padding:
+                13px 0;
+
+            border-bottom:
+                1px solid #eeeaf1;
+
+        }
+
+
+        .info-label {
+
+            margin-bottom: 5px;
+
+            color: #9b96a4;
+
+            font-size: 9px;
+
+            font-weight: 600;
+
+            letter-spacing: .5px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .info-value {
+
+            color: #383442;
+
+            font-size: 13px;
+
+            font-weight: 650;
+
+            word-break: break-word;
+
+        }
+
+
+        /* =====================================================
+           DATASET
+        ====================================================== */
+
+        .dataset-box {
+
+            margin-top: 20px;
+
+            padding: 17px;
+
+            border:
+                1px solid #eadff3;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(250,244,255,.95),
+                    rgba(253,247,252,.95)
+                );
+
+        }
+
+
+        .dataset-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+        }
+
+
+        .dataset-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #625c6d;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+        }
+
+
+        .dataset-title i {
+
+            color: #9676d5;
+
+        }
+
+
+        .dataset-count {
+
+            color: #9667d5;
+
+            font-size: 24px;
+
+            font-weight: 750;
+
+        }
+
+
+        .dataset-description {
+
+            margin:
+                6px 0 0;
+
+            color: #918b99;
+
+            font-size: 9px;
+
+            line-height: 1.65;
+
+        }
+
+
+        /* =====================================================
+           GUIDE BOX
+        ====================================================== */
+
+        .guide-box {
+
+            margin-top: 18px;
+
+            padding: 16px;
+
+            border-radius: 14px;
+
+            background: #f8f6fa;
+
+        }
+
+
+        .guide-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 9px;
+
+            color: #4f495b;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .guide-title i {
+
+            color: #8f72d5;
+
+        }
+
+
+        .guide-list {
+
+            margin: 0;
+
+            padding-left: 17px;
+
+            color: #898491;
+
+            font-size: 10px;
+
+            line-height: 1.9;
+
+        }
+
+
+        .guide-list li::marker {
+
+            color: #a27bd9;
+
+        }
+
+
+        /* =====================================================
+           INFORMATION BOX
+        ====================================================== */
+
+        .information-box {
+
+            margin-top: 15px;
+
+            padding: 14px;
+
+            border:
+                1px solid #e0ebf5;
+
+            border-radius: 13px;
+
+            background:
+                #f4f9fd;
+
+        }
+
+
+        .information-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 6px;
+
+            color: #48769d;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+        }
+
+
+        .information-text {
+
+            margin: 0;
+
+            color: #7c8993;
+
+            font-size: 9px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        .footer {
+
+            margin-top: 35px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid rgba(211,205,219,.65);
+
+            color: #aaa5b2;
+
+            text-align: center;
+
+            font-size: 9px;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 900px) {
+
+            .content-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .topbar {
+
+                padding:
+                    0 15px;
+
+            }
+
+
+            .user-information {
+
+                display: none;
+
+            }
+
+
+            .main-container {
+
+                padding:
+                    27px 14px 45px;
+
+            }
+
+
+            .camera-card {
+
+                padding: 12px;
+
+            }
+
+
+            .camera-wrapper {
+
+                height: 380px;
+
+            }
+
+
+            .face-guide {
+
+                width: 215px;
+
+                height: 285px;
+
+            }
+
+
+            .corner {
+
+                width: 20px;
+
+                height: 20px;
+
+            }
+
+
+            .corner-top-left {
+
+                top: 18px;
+
+                left: 18px;
+
+            }
+
+
+            .corner-top-right {
+
+                top: 18px;
+
+                right: 18px;
+
+            }
+
+
+            .corner-bottom-left {
+
+                bottom: 18px;
+
+                left: 18px;
+
+            }
+
+
+            .corner-bottom-right {
+
+                bottom: 18px;
+
+                right: 18px;
+
+            }
+
+        }
+
+
+        @media (max-width: 420px) {
+
+            .brand-subtitle {
+
+                display: none;
+
+            }
+
+
+            .camera-wrapper {
+
+                height: 340px;
+
+            }
+
+
+            .face-guide {
+
+                width: 190px;
+
+                height: 255px;
+
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-<div class="container">
 
-    <a class="back" href="/employee">
-        ← Kembali
+<!-- =====================================================
+     TOPBAR
+====================================================== -->
+
+<header class="topbar">
+
+
+    <a
+        href="/employee"
+        class="brand"
+    >
+
+        <div class="brand-icon">
+
+            FACE
+
+        </div>
+
+
+        <div>
+
+            <div class="brand-title">
+
+                FACE AI
+
+            </div>
+
+
+            <div class="brand-subtitle">
+
+                Face Recognition System
+
+            </div>
+
+        </div>
+
     </a>
 
-    <div class="card">
 
-        <h2>Registrasi Wajah</h2>
+    <div class="user-section">
 
-        <p>
-            {{ person["name"] }}
-        </p>
 
-        <p>
-            ID: {{ person["person_id"] }}
-        </p>
+        <div class="user-information">
 
-        <p>
-            Dataset saat ini:
-            {{ person["dataset_count"] }}
-        </p>
+            <div class="user-name">
 
-    </div>
+                {{ person["name"] }}
 
-    <div class="card">
+            </div>
 
-        <video
-            id="camera"
-            autoplay
-            playsinline
-            muted>
-        </video>
 
-        <div
-            id="status"
-            class="status">
-            Membuka kamera...
+            <div class="user-role">
+
+                Employee
+
+            </div>
+
         </div>
-        <button
-            id="captureButton"
-            type="button"
-            style="
-                width: 100%;
-                margin-top: 12px;
-                padding: 14px;
-                border: none;
-                border-radius: 10px;
-                background: #222;
-                color: white;
-            ">
-            Mulai Registrasi
-        </button>
 
-        <canvas
-            id="canvas"
-            style="display:none;">
-        </canvas>
+
+        <div class="user-avatar">
+
+            <i class="bi bi-person-fill"></i>
+
+        </div>
+
 
     </div>
 
-</div>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main class="main-container">
+
+
+    <!-- BACK -->
+
+    <a
+        href="/employee"
+        class="back-button"
+    >
+
+        <i class="bi bi-arrow-left"></i>
+
+        Kembali ke Dashboard
+
+    </a>
+
+
+    <!-- HEADER -->
+
+    <div class="page-label">
+
+        <i class="bi bi-person-bounding-box"></i>
+
+        FACE REGISTRATION
+
+    </div>
+
+
+    <h1 class="page-title">
+
+        Registrasi
+        <span>Wajah</span>
+
+    </h1>
+
+
+    <p class="page-description">
+
+        Posisikan wajah di dalam area oval.
+        Pastikan wajah terlihat jelas dan
+        pencahayaan cukup sebelum memulai
+        proses registrasi.
+
+    </p>
+
+
+    <!-- =================================================
+         CONTENT
+    ================================================== -->
+
+    <div class="content-grid">
+
+
+        <!-- =============================================
+             CAMERA
+        ============================================== -->
+
+        <section class="card-custom camera-card">
+
+
+            <div class="camera-header">
+
+
+                <div class="camera-title">
+
+                    <i class="bi bi-camera-video-fill"></i>
+
+                    Kamera Registrasi
+
+                </div>
+
+
+                <div class="live-status">
+
+                    <span class="live-dot"></span>
+
+                    Live Camera
+
+                </div>
+
+
+            </div>
+
+
+            <!-- CAMERA -->
+
+            <div class="camera-wrapper">
+
+
+                <video
+                    id="camera"
+                    autoplay
+                    playsinline
+                    muted>
+                </video>
+
+
+                <!-- =================================
+                     OVAL
+                ================================== -->
+
+                <div class="face-guide"></div>
+
+
+                <!-- =================================
+                     CORNER GUIDE
+                ================================== -->
+
+                <div
+                    class="corner corner-top-left">
+                </div>
+
+
+                <div
+                    class="corner corner-top-right">
+                </div>
+
+
+                <div
+                    class="corner corner-bottom-left">
+                </div>
+
+
+                <div
+                    class="corner corner-bottom-right">
+                </div>
+
+
+                <!-- =================================
+                     CENTER DOT
+                ================================== -->
+
+                <div class="center-dot"></div>
+
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div id="status">
+
+                Membuka kamera...
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button
+                id="captureButton"
+                type="button"
+            >
+
+                <i class="bi bi-camera-fill me-2"></i>
+
+                Mulai Registrasi
+
+            </button>
+
+
+            <!-- TIPS -->
+
+            <div class="tips-box">
+
+
+                <div class="tips-title">
+
+                    <i class="bi bi-lightbulb-fill"></i>
+
+                    Tips Registrasi
+
+                </div>
+
+
+                <p class="tips-text">
+
+                    Posisikan wajah tepat di tengah
+                    oval. Gunakan pencahayaan yang
+                    cukup dan pastikan tidak ada
+                    benda yang menutupi wajah.
+
+                </p>
+
+
+            </div>
+
+
+            <!-- HIDDEN CANVAS -->
+
+            <canvas
+                id="canvas"
+                style="display:none;">
+            </canvas>
+
+
+        </section>
+
+
+        <!-- =============================================
+             PERSON INFORMATION
+        ============================================== -->
+
+        <aside class="card-custom person-card">
+
+
+            <!-- HEADER -->
+
+            <div class="person-header">
+
+
+                <div class="person-icon">
+
+                    <i class="bi bi-person-vcard-fill"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+
+                        Data Pegawai
+
+                    </h2>
+
+
+                    <p>
+
+                        Informasi registrasi wajah
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- NAME -->
+
+            <div class="info-item">
+
+
+                <div class="info-label">
+
+                    Nama
+
+                </div>
+
+
+                <div class="info-value">
+
+                    {{ person["name"] }}
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ID -->
+
+            <div class="info-item">
+
+
+                <div class="info-label">
+
+                    Employee ID
+
+                </div>
+
+
+                <div class="info-value">
+
+                    {{ person["person_id"] }}
+
+                </div>
+
+
+            </div>
+
+
+            <!-- DATASET -->
+
+            <div class="dataset-box">
+
+
+                <div class="dataset-header">
+
+
+                    <div class="dataset-title">
+
+                        <i class="bi bi-images"></i>
+
+                        Dataset Saat Ini
+
+                    </div>
+
+
+                    <div class="dataset-count">
+
+                        {{ person["dataset_count"] }}
+
+                    </div>
+
+
+                </div>
+
+
+                <p class="dataset-description">
+
+                    Jumlah data wajah yang telah
+                    tersimpan pada sistem untuk
+                    pegawai ini.
+
+                </p>
+
+
+            </div>
+
+
+            <!-- GUIDE -->
+
+            <div class="guide-box">
+
+
+                <div class="guide-title">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    Panduan Registrasi
+
+                </div>
+
+
+                <ul class="guide-list">
+
+                    <li>
+                        Posisikan wajah di tengah oval.
+                    </li>
+
+                    <li>
+                        Hadapkan wajah ke kamera.
+                    </li>
+
+                    <li>
+                        Pastikan pencahayaan cukup.
+                    </li>
+
+                    <li>
+                        Jangan menutup wajah.
+                    </li>
+
+                    <li>
+                        Pertahankan posisi selama proses.
+                    </li>
+
+                </ul>
+
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="information-box">
+
+
+                <div class="information-title">
+
+                    <i class="bi bi-info-circle-fill"></i>
+
+                    Informasi
+
+                </div>
+
+
+                <p class="information-text">
+
+                    Sistem akan mengambil gambar
+                    secara otomatis ketika proses
+                    registrasi berjalan dan
+                    mengirimkannya ke server untuk
+                    diproses.
+
+                </p>
+
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        FACE AI Face Recognition System
+        &copy; 2026
+
+    </footer>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
 
 <script>
 
+
+/* =====================================================
+   ELEMENT
+===================================================== */
+
 const video =
-    document.getElementById("camera");
+    document.getElementById(
+        "camera"
+    );
+
 
 const statusText =
-    document.getElementById("status");
+    document.getElementById(
+        "status"
+    );
+
 
 const captureButton =
-    document.getElementById("captureButton");
+    document.getElementById(
+        "captureButton"
+    );
+
 
 const canvas =
-    document.getElementById("canvas");
+    document.getElementById(
+        "canvas"
+    );
 
-let isRunning = false;
-let requestInProgress = false;
-let captureTimer = null;
 
+/* =====================================================
+   STATE
+===================================================== */
+
+let isRunning =
+    false;
+
+
+let requestInProgress =
+    false;
+
+
+let captureTimer =
+    null;
+
+
+
+/* =====================================================
+   START CAMERA
+===================================================== */
 
 async function startCamera() {
+
 
     statusText.innerText =
         "Meminta izin kamera...";
 
+
     try {
 
-        const stream =
-            await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: "user"
-                },
-                audio: false
-            });
 
-        video.srcObject = stream;
+        const stream =
+            await navigator.mediaDevices
+                .getUserMedia({
+
+                    video: {
+
+                        facingMode: "user"
+
+                    },
+
+                    audio: false
+
+                });
+
+
+        /*
+         * Masukkan stream ke video.
+         */
+
+        video.srcObject =
+            stream;
+
+
+        /*
+         * Tunggu video siap.
+         */
 
         await video.play();
 
+
         statusText.innerText =
-            "Kamera siap";
+            "Kamera siap. Posisikan wajah di dalam oval.";
 
-    } catch (error) {
 
-        console.error(error);
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            "Camera Error:",
+            error
+        );
+
 
         statusText.innerText =
             "Kamera gagal: " +
             error.name;
+
+
     }
+
 }
 
 
+
+/* =====================================================
+   SEND FRAME
+===================================================== */
+
 async function sendFrame() {
 
+
+    /*
+     * Jangan mengirim jika
+     * registrasi belum berjalan.
+     */
+
     if (!isRunning) {
+
         return;
+
     }
+
+
+    /*
+     * Jangan mengirim request
+     * jika request sebelumnya
+     * belum selesai.
+     */
 
     if (requestInProgress) {
+
         return;
+
     }
 
-    if (!video.videoWidth || !video.videoHeight) {
+
+    /*
+     * Pastikan video sudah
+     * memiliki ukuran.
+     */
+
+    if (
+        !video.videoWidth ||
+        !video.videoHeight
+    ) {
+
         return;
+
     }
 
-    requestInProgress = true;
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    requestInProgress =
+        true;
+
+
+    /* ==============================================
+       SET CANVAS SIZE
+    ============================================== */
+
+    canvas.width =
+        video.videoWidth;
+
+
+    canvas.height =
+        video.videoHeight;
+
 
     const context =
-        canvas.getContext("2d");
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /* ==============================================
+       AMBIL FRAME ASLI KAMERA
+       
+       OVAL TIDAK IKUT TERKIRIM.
+    ============================================== */
 
     context.drawImage(
+
         video,
+
         0,
+
         0,
+
         canvas.width,
+
         canvas.height
+
     );
+
+
+    /* ==============================================
+       CONVERT JPEG
+    ============================================== */
 
     const imageData =
         canvas.toDataURL(
+
             "image/jpeg",
+
             0.85
+
         );
+
 
     try {
 
-        const response = await fetch(
-            "/employee/register-face/capture",
-            {
-                method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+        /* ==========================================
+           KIRIM KE BACKEND
 
-                body: JSON.stringify({
-                    image: imageData
-                })
-            }
-        );
+           ENDPOINT TETAP SAMA
+        ========================================== */
+
+        const response =
+            await fetch(
+
+                "/employee/register-face/capture",
+
+                {
+
+                    method: "POST",
+
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+
+                    body: JSON.stringify({
+
+                        image:
+                            imageData
+
+                    })
+
+                }
+
+            );
+
+
+        /* ==========================================
+           RESPONSE
+        ========================================== */
 
         const result =
             await response.json();
 
+
         if (result.message) {
+
             statusText.innerText =
                 result.message;
+
         }
 
-    } catch (error) {
 
-        console.error(error);
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            "Request Error:",
+            error
+        );
+
 
         statusText.innerText =
             "Gagal terhubung ke server";
 
+
         stopCapture();
 
-        captureButton.innerText =
-            "Coba Lagi";
+
+        captureButton.innerHTML =
+
+            '<i class="bi bi-arrow-clockwise me-2"></i>' +
+
+            'Coba Lagi';
+
 
         captureButton.disabled =
             false;
 
-    } finally {
-
-        requestInProgress = false;
     }
+
+
+    finally {
+
+
+        requestInProgress =
+            false;
+
+    }
+
 }
 
 
+
+/* =====================================================
+   START CAPTURE
+===================================================== */
+
 function startCapture() {
 
+
+    /*
+     * Jangan menjalankan
+     * dua proses sekaligus.
+     */
+
     if (isRunning) {
+
         return;
+
     }
 
-    isRunning = true;
 
-    captureButton.innerText =
-        "Memproses...";
+    isRunning =
+        true;
+
+
+    /* ==============================================
+       BUTTON
+    ============================================== */
+
+    captureButton.innerHTML =
+
+        '<i class="bi bi-hourglass-split me-2"></i>' +
+
+        'Memproses...';
+
 
     captureButton.disabled =
         true;
 
+
+    /* ==============================================
+       STATUS
+    ============================================== */
+
     statusText.innerText =
         "Memeriksa kualitas wajah...";
 
+
+    /* ==============================================
+       REQUEST PERTAMA
+    ============================================== */
+
     sendFrame();
 
-    captureTimer = setInterval(
-        sendFrame,
-        1000
-    );
+
+    /* ==============================================
+       REQUEST BERKALA
+       
+       TETAP 1 DETIK
+    ============================================== */
+
+    captureTimer =
+        setInterval(
+
+            sendFrame,
+
+            1000
+
+        );
+
 }
 
+
+
+/* =====================================================
+   STOP CAPTURE
+===================================================== */
 
 function stopCapture() {
 
-    isRunning = false;
+
+    isRunning =
+        false;
+
 
     if (captureTimer) {
 
-        clearInterval(captureTimer);
 
-        captureTimer = null;
+        clearInterval(
+
+            captureTimer
+
+        );
+
+
+        captureTimer =
+            null;
+
     }
+
 }
 
 
+
+/* =====================================================
+   BUTTON EVENT
+===================================================== */
+
 captureButton.addEventListener(
+
     "click",
+
     function () {
+
         startCapture();
+
     }
+
 );
 
 
+
+/* =====================================================
+   PAGE CLEANUP
+===================================================== */
+
 window.addEventListener(
+
     "beforeunload",
+
     function () {
+
+
+        /*
+         * Hentikan proses capture.
+         */
 
         stopCapture();
 
+
+        /*
+         * Hentikan kamera.
+         */
+
         if (video.srcObject) {
+
 
             video.srcObject
                 .getTracks()
-                .forEach(function (track) {
-                    track.stop();
-                });
+                .forEach(
 
-            video.srcObject = null;
+                    function (track) {
+
+                        track.stop();
+
+                    }
+
+                );
+
+
+            video.srcObject =
+                null;
+
         }
+
     }
+
 );
 
+
+
+/* =====================================================
+   START
+===================================================== */
 
 startCamera();
 
 </script>
 
+
 </body>
+
 </html>

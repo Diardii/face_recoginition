@@ -199,7 +199,7 @@ async function startCamera() {
 
         } else {
 
-            video.style.transform = "scaleX(1)";
+            video.style.transform = "none";
 
         }
 

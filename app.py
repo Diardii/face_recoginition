@@ -36,6 +36,7 @@ from flask import (
 from database.database import (
     init_db,
     save_person,
+    create_user,
     get_all_persons,
     generate_person_id,
     get_person,
@@ -70,7 +71,7 @@ from training.dataset_validator import DatasetValidator
 
 app = Flask(__name__)
 
-app.secret_key = os.environ.get("SECRET_KEY")
+app.secret_key = ("face_recognition_jetson_2026")
 
 dataset_validator = DatasetValidator()
 
@@ -216,6 +217,11 @@ def employee_home():
 
     if not person:
         return "Data person tidak ditemunkan", 404
+
+    if person["dataset_count"] < 20 or person["status"] != "Siap":
+        return redirect(
+            url_for("employee_register_face")
+        )
 
     return render_template(
         "employee/home.html",
@@ -441,7 +447,45 @@ def employee_attendance_capture():
     image_data = data.get("image")
     attendance_type = data.get("attendance_type")
 
-    if attendance_type not in ("masuk", "pulang"):
+    # ==========================
+    # DATA LOKASI ABSENSI
+    # ==========================
+    latitude = data.get("latitude")
+    longitude = data.get("longitude")
+    accuracy = data.get("accuracy")
+    location_name = data.get("location_name")
+
+    print(
+        "[ATTENDANCE DEBUG] attendance_type =",
+        repr(attendance_type)
+    )
+
+    if attendance_type is None:
+        return jsonify({
+            "status": "error",
+            "message": "Tipe absensi tidak ditemukan"
+        }), 400
+
+    attendance_type = str(
+        attendance_type
+    ).strip().lower()
+
+    # Normalisasi beberapa kemungkinan nilai dari frontend.
+    attendance_type = {
+        "masuk": "masuk",
+        "pulang": "pulang",
+        "check-in": "masuk",
+        "check in": "masuk",
+        "checkin": "masuk",
+        "check-out": "pulang",
+        "check out": "pulang",
+        "checkout": "pulang"
+    }.get(attendance_type, attendance_type)
+
+    if attendance_type not in (
+        "masuk",
+        "pulang"
+    ):
         return jsonify({
             "status": "error",
             "message": "Tipe absensi tidak valid"
@@ -469,6 +513,16 @@ def employee_attendance_capture():
             )
         }), 409
 
+    if attendance_label == "Pulang" and not attendance_exists(
+        person_id=person_id,
+        attendance_type="Masuk"
+    ):
+
+        return jsonify({
+            "status": "error",
+            "message": "Anda belum melakukan absen Masuk hari ini"
+        }), 400
+
     try:
         header, encoded = image_data.split(",", 1)
 
@@ -489,7 +543,7 @@ def employee_attendance_capture():
 
         return jsonify({
             "status": "error",
-            "massage": "foto tidak valid"
+            "message": "foto tidak valid"
         }), 400
 
     if image is None:
@@ -596,7 +650,7 @@ def employee_attendance_capture():
 
         return jsonify({
             "status": "error",
-            "massage": "liveness gagal. silahkan ulangi.",
+            "message": "liveness gagal. silahkan ulangi.",
             "liveness": liveness_result
         }), 400
 
@@ -605,7 +659,11 @@ def employee_attendance_capture():
         saved = mobile_attendance_manager.save(
             result,
             image,
-            attendance_type=attendance_label
+            attendance_type=attendance_label,
+            latitude=latitude,
+            longitude=longitude,
+            accuracy=accuracy,
+            location_name=location_name
         )
 
         challenge.reset()
@@ -679,7 +737,11 @@ def employee_history():
             attendance_date,
             attendance_time,
             attendance_type,
-            confidence
+            confidence,
+            latitude,
+            longitude,
+            accuracy,
+            location_name
         FROM attendance
         WHERE person_id = ?
         ORDER BY attendance_date DESC, attendance_time DESC
@@ -713,6 +775,11 @@ def employee_attendance(attendance_type):
 
     if not person:
         return "Data person tidak ditemukan", 404
+
+    if person["dataset_count"] < 20 or person["status"] != "Siap":
+        return redirect(
+            url_for("employee_register_face")
+        )
 
     return render_template(
         "employee/attendance.html",
@@ -886,6 +953,7 @@ def camera_stop():
         "success": True
     })
 @app.route("/persons/new")
+@admin_required
 def person_add():
 
     return render_template("person_add.html")
@@ -1211,6 +1279,8 @@ def save_person_route():
         name = str(data.get("name", "")).strip()
         gender = str(data.get("gender", "")).strip()
         division = str(data.get("division", "")).strip()
+        username = str(data.get("username", "")).strip()
+        password = str(data.get("password", "")).strip()
         photos = data.get("photos", [])
 
         if not person_id:
@@ -1223,6 +1293,12 @@ def save_person_route():
             return jsonify({
                 "status": "error",
                 "message": "Nama belum diisi."
+            }), 400
+
+        if not username:
+            return jsonify({
+                "status": "error",
+                "message": "Username belum diisi."
             }), 400
 
         if not isinstance(photos, list) or len(photos) == 0:
@@ -1372,6 +1448,13 @@ def save_person_route():
             len(validated_images)
         )
 
+        create_user(
+            username=username,
+            password=password,
+            role="employee",
+            person_id=person_id
+        )
+
         update_dataset_count(person_id)
 
         reload_embeddings()
@@ -1398,7 +1481,79 @@ def save_person_route():
             ).format(error)
         }), 500
 
+@app.route("/admin/person/create", methods=["POST"])
+def admin_create_person():
+    try:
+        data = request.get_json(silent=True)
+
+        if not data:
+            return jsonify({
+                "status": "error",
+                "message": "Data tidak valid."
+            }), 400
+
+        person_id = str(data.get("person_id", "")).strip()
+        name = str(data.get("name", "")).strip()
+        gender = str(data.get("gender", "")).strip()
+        division = str(data.get("division", "")).strip()
+        username = str(data.get("username", "")).strip()
+        password = str(data.get("password", "")).strip()
+
+        if not person_id:
+            return jsonify({
+                "status": "error",
+                "message": "ID person belum tersedia."
+            }), 400
+
+        if not name:
+            return jsonify({
+                "status": "error",
+                "message": "Nama belum diisi."
+            }), 400
+
+        if not username:
+            return jsonify({
+                "status": "error",
+                "message": "Username belum diisi."
+            }), 400
+
+        if not password:
+            return jsonify({
+                "status": "error",
+                "message": "Password belum diisi."
+            }), 400
+
+        save_person(
+            person_id,
+            name,
+            gender,
+            division,
+            0
+        )
+
+        create_user(
+            username=username,
+            password=password,
+            role="employee",
+            person_id=person_id
+        )
+
+        return jsonify({
+            "status": "success",
+            "message": "Person dan akun berhasil dibuat.",
+            "person_id": person_id
+        })
+
+    except Exception as error:
+        print("[ADMIN CREATE PERSON]", error)
+
+        return jsonify({
+            "status": "error",
+            "message": "Gagal membuat person."
+        }), 500
+
 @app.route("/persons/<person_id>/edit")
+@admin_required
 def person_edit(person_id):
 
             person = get_person(person_id)
@@ -1496,6 +1651,7 @@ def dashboard():
 # Data Person
 # ==========================
 @app.route("/persons")
+@admin_required
 def persons():
 
     persons = get_all_persons()
@@ -1510,6 +1666,7 @@ def persons():
 # Tambah Person
 # ==========================
 @app.route("/persons/add")
+@admin_required
 def add_person():
     return render_template("add_person.html")
 
@@ -1525,6 +1682,7 @@ def detail_person():
 # Riwayat
 # ==========================
 @app.route("/history")
+@admin_required
 def history():
 
     attendance = get_all_attendance()

@@ -1,269 +1,2267 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Absensi</title>
+    <title>Absensi | FACE AI</title>
+
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
+
+        * {
+            box-sizing: border-box;
         }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: #302d3d;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(161,140,209,.17),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(251,194,235,.20),
+                    transparent 35%
+                ),
+                #edf1f5;
+
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+
+            height: 72px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 28px;
+
+            background:
+                rgba(255,255,255,.88);
+
+            border-bottom:
+                1px solid #eeeaf1;
+
+            backdrop-filter:
+                blur(15px);
+
+            -webkit-backdrop-filter:
+                blur(15px);
+
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: #292638;
+
+            text-decoration: none;
+
+        }
+
+
+        .brand-icon {
+
+            width: 40px;
+
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 12px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #A18CD1,
+                    #FBC2EB
+                );
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+        }
+
+
+        .brand-name {
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+        }
+
+
+        .brand-sub {
+
+            color: #9994a2;
+
+            font-size: 9px;
+
+        }
+
+
+        .user-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+        }
+
+
+        .user-info {
+
+            text-align: right;
+
+        }
+
+
+        .user-name {
+
+            color: #373344;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+        }
+
+
+        .user-role {
+
+            margin-top: 2px;
+
+            color: #9994a2;
+
+            font-size: 9px;
+
+        }
+
+
+        .avatar {
+
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #A18CD1,
+                    #FBC2EB
+                );
+
+            font-size: 17px;
+
+        }
+
+
+        .logout {
+
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border:
+                1px solid #e9e4ed;
+
+            border-radius: 11px;
+
+            color: #777280;
+
+            background: white;
+
+            text-decoration: none;
+
+            font-size: 15px;
+
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
 
         .container {
-            max-width: 480px;
+
+            width: min(1150px, 100%);
+
             margin: auto;
-            padding: 20px;
+
+            padding:
+                35px 20px 50px;
+
         }
 
-        .card {
-            background: white;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
 
-        video {
-            width: 100%;
-            border-radius: 12px;
-            background: black;
-        }
-
-        .status {
-            margin-top: 12px;
-            text-align: center;
-        }
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
 
         .back {
-            display: inline-block;
-            margin-bottom: 16px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 22px;
+
+            padding:
+                9px 13px;
+
+            border:
+                1px solid #e5e0e9;
+
+            border-radius: 10px;
+
+            color: #777280;
+
+            background: white;
+
             text-decoration: none;
+
+            font-size: 11px;
+
+            transition: .2s ease;
+
         }
+
+
+        .back:hover {
+
+            color: #A18CD1;
+
+            transform:
+                translateX(-2px);
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .label {
+
+            margin-bottom: 7px;
+
+            color: #A18CD1;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: .7px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        h1 {
+
+            margin: 0;
+
+            color: #292638;
+
+            font-size: 34px;
+
+            font-weight: 700;
+
+        }
+
+
+        h1 span {
+
+            color: #A18CD1;
+
+        }
+
+
+        .description {
+
+            max-width: 700px;
+
+            margin:
+                8px 0 25px;
+
+            color: #8d8995;
+
+            font-size: 12px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =====================================================
+           LAYOUT
+        ===================================================== */
+
+        .layout {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0,1.5fr)
+                minmax(280px,.8fr);
+
+            gap: 20px;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            padding: 18px;
+
+            border:
+                1px solid rgba(255,255,255,.9);
+
+            border-radius: 22px;
+
+            background:
+                rgba(255,255,255,.90);
+
+            box-shadow:
+                0 18px 45px
+                rgba(50,40,80,.08);
+
+            backdrop-filter:
+                blur(12px);
+
+        }
+
+
+        /* =====================================================
+           CAMERA HEADER
+        ===================================================== */
+
+        .camera-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 14px;
+
+        }
+
+
+        .camera-title {
+
+            color: #383443;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+        }
+
+
+        .live {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding:
+                6px 10px;
+
+            border-radius: 9px;
+
+            color: #6e6978;
+
+            background: #f6f3f9;
+
+            font-size: 9px;
+
+        }
+
+
+        .live-dot {
+
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #45b97c;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(69,185,124,.12);
+
+        }
+
+
+        /* =====================================================
+           CAMERA
+        ===================================================== */
+
+        .camera-wrapper {
+
+            position: relative;
+
+            overflow: hidden;
+
+            width: 100%;
+
+            height: 450px;
+
+            border-radius: 18px;
+
+            background: #111;
+
+        }
+
+
+        #camera {
+
+            display: block;
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            transform:
+                scaleX(-1);
+
+            background: #111;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+        ===================================================== */
+
+        #status {
+
+            min-height: 45px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-top: 13px;
+
+            padding:
+                10px 12px;
+
+            border-radius: 11px;
+
+            color: #696472;
+
+            background: #f7f5f9;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+
+            text-align: center;
+
+        }
+
+
+        #status::before {
+
+            content: "";
+
+            width: 7px;
+
+            height: 7px;
+
+            flex-shrink: 0;
+
+            margin-right: 7px;
+
+            border-radius: 50%;
+
+            background: #A18CD1;
+
+        }
+
+
+        /* =====================================================
+           LOCATION
+        ===================================================== */
+
+        .location-box {
+
+            margin-top: 12px;
+
+            padding:
+                15px;
+
+            border:
+                1px solid #eeeaf1;
+
+            border-radius: 14px;
+
+            background: #f7f5f9;
+
+        }
+
+
+        .location-header {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .location-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 11px;
+
+            color: #A18CD1;
+
+            background: #eee8f7;
+
+            font-size: 18px;
+
+        }
+
+
+        .location-title {
+
+            color: #4b4657;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .location-subtitle {
+
+            margin-top: 3px;
+
+            color: #9b96a3;
+
+            font-size: 9px;
+
+        }
+
+
+        .location-name {
+
+            padding:
+                12px;
+
+            border-radius: 10px;
+
+            color: #383443;
+
+            background: white;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            line-height: 1.6;
+
+        }
+
+
+        .location-name.loading {
+
+            color: #9994a2;
+
+            font-weight: 400;
+
+        }
+
+
+        .coordinates {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 8px;
+
+            margin-top: 8px;
+
+        }
+
+
+        .coordinate {
+
+            padding:
+                10px;
+
+            border-radius: 9px;
+
+            background: white;
+
+        }
+
+
+        .coordinate-label {
+
+            margin-bottom: 4px;
+
+            color: #aaa5b1;
+
+            font-size: 8px;
+
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .coordinate-value {
+
+            color: #383443;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            word-break: break-word;
+
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        #captureButton {
+
+            width: 100%;
+
+            min-height: 52px;
+
+            margin-top: 10px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #A18CD1,
+                    #FBC2EB
+                );
+
+            box-shadow:
+                0 8px 22px
+                rgba(161,140,209,.25);
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                .2s ease;
+
+        }
+
+
+        #captureButton:hover:not(:disabled) {
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        #captureButton:disabled {
+
+            opacity: .7;
+
+            cursor: not-allowed;
+
+        }
+
+        .attendance-popup {
+
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            width: 85%;
+
+            padding: 25px;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            font-size: 26px;
+            font-weight: bold;
+
+            color: white;
+
+            z-index: 10;
+
+            display: none;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.3);
+        }
+
+
+        .attendance-popup.success {
+            background: 
+                linear-gradient(
+                    135deg,
+                    #00c853,
+                    #64dd17
+                );
+        }
+
+
+        .attendance-popup.error {
+            background: linear-gradient(
+                135deg,
+                #d50000,
+                #ff1744
+            );
+        }
+
+
+        .attendance-popup small {
+
+            display:block;
+
+            margin-top:10px;
+
+            font-size:16px;
+
+            font-weight:normal;
+
+        }
+
+
+        /* =====================================================
+           PERSON CARD
+        ===================================================== */
+
+        .person-title {
+
+            margin-bottom: 5px;
+
+            color: #34303f;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+        }
+
+
+        .person-subtitle {
+
+            margin-bottom: 22px;
+
+            color: #9994a2;
+
+            font-size: 10px;
+
+        }
+
+
+        .info {
+
+            padding:
+                13px 0;
+
+            border-bottom:
+                1px solid #eeeaf1;
+
+        }
+
+
+        .info-label {
+
+            margin-bottom: 4px;
+
+            color: #9994a2;
+
+            font-size: 9px;
+
+            font-weight: 600;
+
+            letter-spacing: .5px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .info-value {
+
+            color: #383443;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* =====================================================
+           ATTENDANCE TYPE
+        ===================================================== */
+
+        .attendance-type {
+
+            margin-top: 20px;
+
+            padding: 17px;
+
+            border-radius: 14px;
+
+            background: #f7f4fa;
+
+        }
+
+
+        .attendance-label {
+
+            color: #777280;
+
+            font-size: 10px;
+
+        }
+
+
+        .attendance-value {
+
+            margin-top: 4px;
+
+            color: #A18CD1;
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =====================================================
+           GUIDE
+        ===================================================== */
+
+        .guide {
+
+            margin-top: 18px;
+
+            padding: 16px;
+
+            border-radius: 14px;
+
+            background: #f7f4fa;
+
+        }
+
+
+        .guide-title {
+
+            margin-bottom: 8px;
+
+            color: #4b4657;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .guide ul {
+
+            margin: 0;
+
+            padding-left: 18px;
+
+            color: #8c8795;
+
+            font-size: 10px;
+
+            line-height: 1.9;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            margin-top: 30px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid #ddd8e3;
+
+            color: #aaa5b1;
+
+            font-size: 9px;
+
+            text-align: center;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .layout {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .navbar {
+
+                padding:
+                    0 15px;
+
+            }
+
+
+            .user-info {
+
+                display: none;
+
+            }
+
+
+            .container {
+
+                padding:
+                    25px 14px 40px;
+
+            }
+
+
+            .card {
+
+                padding: 13px;
+
+            }
+
+
+            .camera-wrapper {
+
+                height: 390px;
+
+            }
+
+
+            .coordinates {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            h1 {
+
+                font-size: 28px;
+
+            }
+
+        }
+
+
+        @media (max-width: 400px) {
+
+            .camera-wrapper {
+
+                height: 340px;
+
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-<div class="container">
 
-    <a class="back"
-       href="/employee">
-        ← Kembali
+<!-- =====================================================
+     NAVBAR
+====================================================== -->
+
+<nav class="navbar">
+
+
+    <a
+        href="/employee"
+        class="brand"
+    >
+
+        <div class="brand-icon">
+
+            FACE
+
+        </div>
+
+
+        <div>
+
+            <div class="brand-name">
+
+                FACE AI
+
+            </div>
+
+
+            <div class="brand-sub">
+
+                Face Recognition System
+
+            </div>
+
+        </div>
+
     </a>
 
-    <div class="card">
 
-        <h2>
-            Absen {{ attendance_type|capitalize }}
-        </h2>
+    <div class="user-area">
 
-        <p>
-            {{ person["name"] }}
-        </p>
 
-        <p>
-            ID: {{ person["person_id"] }}
-        </p>
+        <div class="user-info">
 
-    </div>
+            <div class="user-name">
 
-    <div class="card">
+                {{ person["name"] }}
 
-        <video
-            id="camera"
-            autoplay
-            playsinline
-            muted>
-        </video>
+            </div>
 
-        <div
-            id="status"
-            class="status">
-            Membuka kamera...
+
+            <div class="user-role">
+
+                Employee
+
+            </div>
+
         </div>
-        <button
-            id="captureButton"
-            type="button"
-            style="
-                width: 100%;
-                margin-top: 12px;
-                padding: 14px;
-                border: none;
-                border-radius: 10px;
-                background: #222;
-                color: white;
-            ">
-            Mulai Absensi
-        </button>
 
-        <canvas
-            id="canvas"
-            style="display:none;">
-        </canvas>
+
+        <div class="avatar">
+
+            👤
+
+        </div>
+
+
+        <a
+            href="/logout"
+            class="logout"
+        >
+
+            ↪
+
+        </a>
+
 
     </div>
 
-</div>
+
+</nav>
+
+
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
+<main class="container">
+
+
+    <a
+        href="/employee"
+        class="back"
+    >
+
+        ← Kembali ke Dashboard
+
+    </a>
+
+
+    <div class="label">
+
+        FACE ATTENDANCE
+
+    </div>
+
+
+    <h1>
+
+        Absensi
+        <span>{{ attendance_type }}</span>
+
+    </h1>
+
+
+    <p class="description">
+
+        Hadapkan wajah ke kamera dan pastikan
+        lokasi perangkat berhasil terdeteksi
+        sebelum melakukan absensi.
+
+    </p>
+
+
+    <div class="layout">
+
+
+        <!-- =================================================
+             CAMERA CARD
+        ================================================== -->
+
+        <section class="card">
+
+
+            <div class="camera-header">
+
+
+                <div class="camera-title">
+
+                    Kamera Absensi
+
+                </div>
+
+
+                <div class="live">
+
+                    <span class="live-dot"></span>
+
+                    Live Camera
+
+                </div>
+
+
+            </div>
+
+
+            <!-- CAMERA -->
+
+            <div class="camera-wrapper">
+
+
+                <div id="attendancePopup"
+                     class="attendance-popup">
+                </div>
+
+
+
+                <video
+                    id="camera"
+                    autoplay
+                    playsinline
+                    muted>
+                </video>
+
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div id="status">
+
+                Membuka kamera...
+
+            </div>
+
+
+            <!-- =================================================
+                 LOCATION
+            ================================================== -->
+
+            <div class="location-box">
+
+
+                <div class="location-header">
+
+
+                    <div class="location-icon">
+
+                        📍
+
+                    </div>
+
+
+                    <div>
+
+
+                        <div class="location-title">
+
+                            Lokasi Absensi
+
+                        </div>
+
+
+                        <div class="location-subtitle">
+
+                            Lokasi perangkat saat melakukan absensi
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- NAMA TEMPAT -->
+
+                <div
+                    id="locationName"
+                    class="location-name loading"
+                >
+
+                    Mendeteksi lokasi...
+
+                </div>
+
+
+                <!-- KOORDINAT -->
+
+                <div class="coordinates">
+
+
+                    <div class="coordinate">
+
+
+                        <div class="coordinate-label">
+
+                            Latitude
+
+                        </div>
+
+
+                        <div
+                            id="latitude"
+                            class="coordinate-value"
+                        >
+
+                            Mendeteksi...
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="coordinate">
+
+
+                        <div class="coordinate-label">
+
+                            Longitude
+
+                        </div>
+
+
+                        <div
+                            id="longitude"
+                            class="coordinate-value"
+                        >
+
+                            Mendeteksi...
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button
+                id="captureButton"
+                type="button"
+            >
+
+                Mulai Absensi
+
+            </button>
+
+
+            <!-- CANVAS -->
+
+            <canvas
+                id="canvas"
+                style="display:none;">
+            </canvas>
+
+
+        </section>
+
+
+        <!-- =================================================
+             PERSON INFORMATION
+        ================================================== -->
+
+        <aside class="card">
+
+
+            <div class="person-title">
+
+                Data Pegawai
+
+            </div>
+
+
+            <div class="person-subtitle">
+
+                Informasi pengguna yang melakukan absensi
+
+            </div>
+
+
+            <div class="info">
+
+
+                <div class="info-label">
+
+                    Nama
+
+                </div>
+
+
+                <div class="info-value">
+
+                    {{ person["name"] }}
+
+                </div>
+
+
+            </div>
+
+
+            <div class="info">
+
+
+                <div class="info-label">
+
+                    Employee ID
+
+                </div>
+
+
+                <div class="info-value">
+
+                    {{ person["person_id"] }}
+
+                </div>
+
+
+            </div>
+
+
+            <div class="attendance-type">
+
+
+                <div class="attendance-label">
+
+                    Jenis Absensi
+
+                </div>
+
+
+                <div class="attendance-value">
+
+                    {{ attendance_type }}
+
+                </div>
+
+
+            </div>
+
+
+            <div class="guide">
+
+
+                <div class="guide-title">
+
+                    Panduan Absensi
+
+                </div>
+
+
+                <ul>
+
+                    <li>
+
+                        Hadapkan wajah ke kamera.
+
+                    </li>
+
+
+                    <li>
+
+                        Pastikan wajah terlihat jelas.
+
+                    </li>
+
+
+                    <li>
+
+                        Gunakan pencahayaan yang cukup.
+
+                    </li>
+
+
+                    <li>
+
+                        Izinkan akses lokasi.
+
+                    </li>
+
+
+                    <li>
+
+                        Tunggu sampai lokasi berhasil terdeteksi.
+
+                    </li>
+
+
+                    <li>
+
+                        Pertahankan posisi selama proses absensi.
+
+                    </li>
+
+                </ul>
+
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
+
+
+    <footer>
+
+        FACE AI Face Recognition System © 2026
+
+    </footer>
+
+
+</main>
 
 
 <script>
 
+
+/* =====================================================
+   ELEMENT
+===================================================== */
+
 const video =
-    document.getElementById("camera");
+    document.getElementById(
+        "camera"
+    );
+
 
 const statusText =
-    document.getElementById("status");
+    document.getElementById(
+        "status"
+    );
 
 const captureButton =
-    document.getElementById("captureButton");
+    document.getElementById(
+        "captureButton"
+    );
+
+const attendancePopup =
+    document.getElementById(
+        "attendancePopup"
+    );
 
 const canvas =
-    document.getElementById("canvas");
+    document.getElementById(
+        "canvas"
+    );
 
-let isRunning = false;
-let requestInProgress = false;
-let captureTimer = null;
+
+const latitudeText =
+    document.getElementById(
+        "latitude"
+    );
+
+
+const longitudeText =
+    document.getElementById(
+        "longitude"
+    );
+
+
+const locationName =
+    document.getElementById(
+        "locationName"
+    );
+
+/* =====================================================
+   ATTENDANCE TYPE
+   Nilai berasal dari Flask:
+   {{ attendance_type }}
+===================================================== */
+
+const attendanceType =
+    "{{ attendance_type }}";
+
+
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let isRunning =
+    false;
+
+
+let requestInProgress =
+    false;
+
+
+let captureTimer =
+    null;
+
+
+let latitude =
+    null;
+
+
+let longitude =
+    null;
+
+
+let accuracy =
+    null;
+
+
+let locationReady =
+    false;
+
+
+
+/* =====================================================
+   START CAMERA
+===================================================== */
 
 async function startCamera() {
+
 
     statusText.innerText =
         "Meminta izin kamera...";
 
+
     try {
 
-        if (!navigator.mediaDevices ||
-            !navigator.mediaDevices.getUserMedia) {
-
-            statusText.innerText =
-                "Browser tidak mendukung akses kamera";
-
-            return;
-        }
 
         const stream =
-            await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false
-            });
+            await navigator
+                .mediaDevices
+                .getUserMedia({
 
-        statusText.innerText =
-            "Stream kamera diterima...";
+                    video: {
 
-        video.srcObject = stream;
+                        facingMode:
+                            "user"
+
+                    },
+
+                    audio: false
+
+                });
+
+
+        video.srcObject =
+            stream;
+
 
         await video.play();
 
-        statusText.innerText =
-            "Kamera siap";
 
-    } catch (error) {
+        statusText.innerText =
+            "Kamera siap. Menunggu lokasi...";
+
+
+    }
+
+
+    catch (error) {
+
 
         console.error(
-            "CAMERA ERROR:",
-            error.name,
-            error.message
+            "Camera Error:",
+            error
         );
+
 
         statusText.innerText =
             "Kamera gagal: " +
-            error.name +
-            " - " +
-            error.message;
+            error.name;
+
     }
+
 }
 
 
-async function sendFrame() {
 
-    if (!isRunning) {
-        return;
-    }
+/* =====================================================
+   REVERSE GEOCODING
+===================================================== */
 
-    if (requestInProgress) {
-        return;
-    }
+async function getPlaceName(
+    lat,
+    lon
+) {
 
-    if (!video.videoWidth || !video.videoHeight) {
-        statusText.innerText =
-            "Kamera belum siap";
-        return;
-    }
 
-    requestInProgress = true;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    const context =
-        canvas.getContext("2d");
-
-    context.drawImage(
-        video,
-        0,
-        0,
-        canvas.width,
-        canvas.height
+    locationName.classList.add(
+        "loading"
     );
 
-    const imageData =
-        canvas.toDataURL(
-            "image/jpeg",
-            0.85
-        );
+
+    locationName.innerText =
+        "Mencari nama tempat...";
+
 
     try {
 
-        const response = await fetch(
-            "/employee/attendance/capture",
-            {
-                method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+        /*
+         * Mengubah koordinat GPS
+         * menjadi nama/alamat lokasi.
+         */
 
-                body: JSON.stringify({
-                    image: imageData,
-                    attendance_type:
-                        "{{ attendance_type }}"
-                })
-            }
+        const url =
+            "https://nominatim.openstreetmap.org/reverse" +
+            "?format=jsonv2" +
+            "&lat=" +
+            encodeURIComponent(lat) +
+            "&lon=" +
+            encodeURIComponent(lon) +
+            "&zoom=18" +
+            "&addressdetails=1";
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Reverse geocoding gagal"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            data.display_name
+        ) {
+
+
+            locationName.classList.remove(
+                "loading"
+            );
+
+
+            locationName.innerText =
+                data.display_name;
+
+
+        }
+
+
+        else {
+
+
+            locationName.classList.remove(
+                "loading"
+            );
+
+
+            locationName.innerText =
+                "Nama tempat tidak ditemukan";
+
+        }
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            "Geocoding Error:",
+            error
         );
+
+
+        locationName.classList.remove(
+            "loading"
+        );
+
+
+        locationName.innerText =
+            "Nama tempat tidak dapat diperoleh";
+
+    }
+
+}
+
+
+
+/* =====================================================
+   GET LOCATION
+===================================================== */
+
+function getLocation() {
+
+
+    if (
+        !navigator.geolocation
+    ) {
+
+
+        locationName.classList.remove(
+            "loading"
+        );
+
+
+        locationName.innerText =
+            "GPS tidak didukung browser";
+
+
+        latitudeText.innerText =
+            "Tidak tersedia";
+
+
+        longitudeText.innerText =
+            "Tidak tersedia";
+
+
+        locationReady =
+            false;
+
+
+        return;
+
+    }
+
+
+    locationName.innerText =
+        "Meminta izin lokasi...";
+
+
+    latitudeText.innerText =
+        "Mendeteksi...";
+
+
+    longitudeText.innerText =
+        "Mendeteksi...";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+
+        async function(position) {
+
+
+            latitude =
+                position.coords.latitude;
+
+
+            longitude =
+                position.coords.longitude;
+
+
+            accuracy =
+                position.coords.accuracy;
+
+
+            locationReady =
+                true;
+
+
+            latitudeText.innerText =
+                latitude.toFixed(6);
+
+
+            longitudeText.innerText =
+                longitude.toFixed(6);
+
+
+            statusText.innerText =
+                "Kamera dan lokasi siap.";
+
+
+            /*
+             * Cari nama tempat
+             * berdasarkan koordinat.
+             */
+
+            await getPlaceName(
+
+                latitude,
+
+                longitude
+
+            );
+
+
+        },
+
+
+        function(error) {
+
+
+            console.error(
+                "Location Error:",
+                error
+            );
+
+
+            locationReady =
+                false;
+
+
+            switch (
+                error.code
+            ) {
+
+
+                case error.PERMISSION_DENIED:
+
+                    locationName.classList.remove(
+                        "loading"
+                    );
+
+                    locationName.innerText =
+                        "Izin lokasi ditolak";
+
+                    latitudeText.innerText =
+                        "Izin ditolak";
+
+                    longitudeText.innerText =
+                        "Izin ditolak";
+
+                    statusText.innerText =
+                        "Izin lokasi diperlukan untuk absensi.";
+
+                    break;
+
+
+                case error.POSITION_UNAVAILABLE:
+
+                    locationName.classList.remove(
+                        "loading"
+                    );
+
+                    locationName.innerText =
+                        "Lokasi perangkat tidak tersedia";
+
+                    latitudeText.innerText =
+                        "Tidak tersedia";
+
+                    longitudeText.innerText =
+                        "Tidak tersedia";
+
+                    statusText.innerText =
+                        "Lokasi perangkat tidak tersedia.";
+
+                    break;
+
+
+                case error.TIMEOUT:
+
+                    locationName.classList.remove(
+                        "loading"
+                    );
+
+                    locationName.innerText =
+                        "Waktu mendapatkan lokasi habis";
+
+                    latitudeText.innerText =
+                        "Timeout";
+
+                    longitudeText.innerText =
+                        "Timeout";
+
+                    statusText.innerText =
+                        "Pengambilan lokasi terlalu lama.";
+
+                    break;
+
+
+                default:
+
+                    locationName.classList.remove(
+                        "loading"
+                    );
+
+                    locationName.innerText =
+                        "Gagal mendapatkan lokasi";
+
+                    latitudeText.innerText =
+                        "Gagal";
+
+                    longitudeText.innerText =
+                        "Gagal";
+
+                    statusText.innerText =
+                        "Gagal mendapatkan lokasi.";
+
+            }
+
+        },
+
+
+        {
+
+            enableHighAccuracy:
+                true,
+
+            timeout:
+                15000,
+
+            maximumAge:
+                0
+
+        }
+
+    );
+
+}
+
+
+
+/* =====================================================
+   SEND FRAME
+===================================================== */
+
+async function sendFrame() {
+
+
+    if (!isRunning) {
+
+        return;
+
+    }
+
+
+    if (requestInProgress) {
+
+        return;
+
+    }
+
+
+    if (
+        !video.videoWidth ||
+        !video.videoHeight
+    ) {
+
+        return;
+
+    }
+
+
+    if (!locationReady) {
+
+
+        statusText.innerText =
+            "Lokasi belum tersedia. Menunggu GPS...";
+
+
+        return;
+
+    }
+
+
+    requestInProgress =
+        true;
+
+
+    canvas.width =
+        video.videoWidth;
+
+
+    canvas.height =
+        video.videoHeight;
+
+
+    const context =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    /*
+     * Mengambil frame kamera asli.
+     * Tidak ada overlay yang ikut terkirim.
+     */
+
+    context.drawImage(
+
+        video,
+
+        0,
+
+        0,
+
+        canvas.width,
+
+        canvas.height
+
+    );
+
+
+    const imageData =
+        canvas.toDataURL(
+
+            "image/jpeg",
+
+            0.85
+
+        );
+
+
+    try {
+
+
+        const response =
+            await fetch(
+
+                "/employee/attendance/capture",
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+					
+					body:
+						JSON.stringify({
+
+							image:
+								imageData,
+
+							attendance_type:
+                                attendanceType,
+
+                            latitude:
+								latitude,
+
+							longitude:
+								longitude,
+
+							accuracy:
+								accuracy,
+
+							location_name:
+								locationName.innerText
+
+						})
+                    
+                }
+
+            );
+
 
         const result =
             await response.json();
 
-        if (result.message) {
+
+        if (
+            result.message
+        ) {
+
             statusText.innerText =
                 result.message;
+
         }
 
         if (
             result.status === "success"
         ) {
 
-            stopAutoCapture();
+            stopCapture();
+
+            isRunning = false;
+
+            statusText.innerText =
+                result.message;
 
             captureButton.innerText =
-                "Selesai";
+                "Absensi Berhasil";
 
             captureButton.disabled =
-                true;
+                false;
 
             return;
         }
+
 
         if (
             result.status === "error"
         ) {
 
-            stopAutoCapture();
+            stopCapture();
+
+            isRunning = false;
+
+            statusText.innerText =
+                result.message;
 
             captureButton.innerText =
                 "Coba Lagi";
@@ -274,87 +2272,209 @@ async function sendFrame() {
             return;
         }
 
-    } catch (error) {
 
-        console.error(error);
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            "Attendance Error:",
+            error
+        );
+
 
         statusText.innerText =
             "Gagal terhubung ke server";
 
-        stopAutoCapture();
+
+        stopCapture();
+
 
         captureButton.innerText =
             "Coba Lagi";
 
+
         captureButton.disabled =
             false;
 
-    } finally {
-
-        requestInProgress = false;
     }
+
+
+    finally {
+
+        requestInProgress =
+            false;
+
+    }
+
 }
 
 
-function startAutoCapture() {
+
+/* =====================================================
+   START CAPTURE
+===================================================== */
+
+function startCapture() {
+
 
     if (isRunning) {
+
         return;
+
     }
 
-    if (!video.videoWidth || !video.videoHeight) {
+
+    if (!locationReady) {
+
 
         statusText.innerText =
-            "Kamera belum siap";
+            "Tunggu sampai lokasi berhasil terdeteksi.";
+
+
+        getLocation();
+
 
         return;
+
     }
 
-    isRunning = true;
+
+    isRunning =
+        true;
+
 
     captureButton.innerText =
         "Memproses...";
 
+
     captureButton.disabled =
         true;
 
+
     statusText.innerText =
-        "Memulai verifikasi...";
+        "Memeriksa wajah dan lokasi...";
+
 
     sendFrame();
 
-    captureTimer = setInterval(
-        sendFrame,
-        700
-    );
+
+    captureTimer =
+        setInterval(
+
+            sendFrame,
+
+            1000
+
+        );
+
 }
 
 
-function stopAutoCapture() {
 
-    isRunning = false;
+/* =====================================================
+   STOP CAPTURE
+===================================================== */
+
+function stopCapture() {
+
+
+    isRunning =
+        false;
+
 
     if (captureTimer) {
 
-        clearInterval(captureTimer);
 
-        captureTimer = null;
+        clearInterval(
+            captureTimer
+        );
+
+
+        captureTimer =
+            null;
+
     }
+
 }
 
 
-captureButton.addEventListener(
-    "click",
-    function () {
 
-        startAutoCapture();
+/* =====================================================
+   BUTTON
+===================================================== */
+
+captureButton.addEventListener(
+
+    "click",
+
+    function() {
+
+        startCapture();
+
     }
+
 );
 
 
+
+/* =====================================================
+   CLEANUP
+===================================================== */
+
+window.addEventListener(
+
+    "beforeunload",
+
+    function() {
+
+
+        stopCapture();
+
+
+        if (
+            video.srcObject
+        ) {
+
+
+            video.srcObject
+                .getTracks()
+                .forEach(
+
+                    function(track) {
+
+                        track.stop();
+
+                    }
+
+                );
+
+
+            video.srcObject =
+                null;
+
+        }
+
+    }
+
+);
+
+
+
+/* =====================================================
+   START
+===================================================== */
+
 startCamera();
+
+getLocation();
+
 
 </script>
 
+
 </body>
+
 </html>

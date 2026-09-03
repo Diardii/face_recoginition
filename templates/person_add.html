@@ -1,32 +1,6 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<input
-    type="file"
-    id="fileUpload"
-    accept="image/*"
-    multiple
-    hidden>
-
-<div class="mb-3">
-
-    <button
-        id="btnUpload"
-        class="btn btn-primary">
-
-        Upload Dataset
-
-    </button>
-
-    <button
-        id="btnDeleteLast"
-        class="btn btn-danger">
-
-        Delete Last
-
-    </button>
-
-</div>
 
 <div class="container-fluid">
 
@@ -44,7 +18,7 @@
 
             <small class="text-muted">
 
-                Tambahkan dataset wajah baru.
+                Tambahkan data person dan akun employee baru.
 
             </small>
 
@@ -63,63 +37,6 @@
     </div>
 
     <div class="row g-4">
-
-        <!-- Camera -->
-
-        <div class="col-lg-5">
-
-            <div class="card shadow">
-
-                <div class="card-header">
-
-                    Live Camera
-
-                </div>
-
-                <div class="card-body">
-
-                    <div class="camera-preview">
-
-                        <img
-                            id="cameraPreview"
-                            class="img-fluid rounded"
-                            src="">
-
-                    </div>
-
-                    <div class="mt-3 d-flex gap-2">
-
-                        <button
-                            id="btnStartCamera"
-                            class="btn btn-success">
-
-                            Start
-
-                        </button>
-
-                        <button
-                            id="btnStopCamera"
-                            class="btn btn-danger">
-
-                            Stop
-
-                        </button>
-
-                        <button
-                            id="btnCapture"
-                            class="btn btn-primary">
-
-                            Capture
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
 
         <!-- Form -->
 
@@ -172,12 +89,27 @@
                     </div>
 
                     <div class="mb-3">
-
                         <label>Divisi</label>
-
                         <input
                             id="personDivision"
                             class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Username</label>
+                        <input
+                            id="personUsername"
+                            class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Password</label>
+                        <input
+                            id="personPassword"
+                            type="password"
+                            class="form-control">
+                    </div>
+
 
                     </div>
 
@@ -195,39 +127,6 @@
 
         </div>
 
-        <!-- Dataset -->
-
-        <div class="col-12">
-
-            <div class="card shadow">
-
-                <div class="card-header d-flex justify-content-between">
-
-                    <span>Dataset</span>
-
-                    <span id="photoCount">
-
-                        0 / 20 Foto
-
-                    </span>
-
-                </div>
-
-                <div class="card-body">
-
-                    <div
-                        id="datasetGrid"
-                        class="dataset-grid">
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
 
 </div>
 

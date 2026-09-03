@@ -1,105 +1,1516 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Employee</title>
+    <title>Employee | FACE AI</title>
+
+    <!-- Bootstrap 5.3.3 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <!-- Main Style -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background: #f5f5f5;
+
+        /* =========================================
+           EMPLOYEE DASHBOARD
+        ========================================= */
+
+        body.employee-page {
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(161, 140, 209, 0.16),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(251, 194, 235, 0.18),
+                    transparent 32%
+                ),
+                #edf1f5;
+
+            color: #292638;
+
         }
 
-        .container {
-            max-width: 480px;
-            margin: auto;
-            padding: 20px;
+
+        /* =========================================
+           NAVBAR
+        ========================================= */
+
+        .employee-navbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            background: rgba(255, 255, 255, 0.82);
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+
+            backdrop-filter: blur(18px);
+
+            -webkit-backdrop-filter: blur(18px);
+
         }
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 16px;
+
+        .navbar-inner {
+
+            min-height: 72px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
         }
 
-        .menu {
-            display: grid;
-            gap: 12px;
-        }
 
-        .menu a {
-            display: block;
-            padding: 16px;
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            color: #292638;
+
             text-decoration: none;
-            background: #eeeeee;
-            color: #222222;
-            border-radius: 10px;
+
         }
 
-        .logout {
-            color: red;
+
+        .brand-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 13px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #A18CD1,
+                    #FBC2EB
+                );
+
+            box-shadow:
+                0 7px 18px rgba(161, 140, 209, 0.25);
+
         }
+
+
+        .brand-name {
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            letter-spacing: .4px;
+
+        }
+
+
+        .brand-subtitle {
+
+            display: block;
+
+            margin-top: -2px;
+
+            color: #96919f;
+
+            font-size: 10px;
+
+        }
+
+
+        .employee-user {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+        }
+
+
+        .user-info {
+
+            text-align: right;
+
+        }
+
+
+        .user-name {
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #373344;
+
+        }
+
+
+        .user-role {
+
+            color: #9a96a4;
+
+            font-size: 10px;
+
+        }
+
+
+        .user-avatar {
+
+            width: 40px;
+
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #A18CD1,
+                    #FBC2EB
+                );
+
+            font-size: 16px;
+
+        }
+
+
+        .logout-btn {
+
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-left: 5px;
+
+            border: 1px solid #ece8f1;
+
+            border-radius: 11px;
+
+            color: #777280;
+
+            background: white;
+
+            text-decoration: none;
+
+            transition: .25s ease;
+
+        }
+
+
+        .logout-btn:hover {
+
+            color: #842029;
+
+            background: #fff1f2;
+
+            border-color: #ffd5da;
+
+            transform: translateY(-1px);
+
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .employee-main {
+
+            max-width: 1180px;
+
+            margin: auto;
+
+            padding: 42px 22px 55px;
+
+        }
+
+
+        /* =========================================
+           WELCOME
+        ========================================= */
+
+        .welcome-section {
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .welcome-label {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 10px;
+
+            color: #A18CD1;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: .5px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .welcome-title {
+
+            margin: 0;
+
+            color: #292638;
+
+            font-size: clamp(28px, 4vw, 38px);
+
+            font-weight: 700;
+
+            line-height: 1.2;
+
+        }
+
+
+        .welcome-title span {
+
+            color: #A18CD1;
+
+        }
+
+
+        .welcome-description {
+
+            max-width: 650px;
+
+            margin-top: 9px;
+
+            color: #817d8b;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+        }
+
+
+        /* =========================================
+           PROFILE CARD
+        ========================================= */
+
+        .profile-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            margin-bottom: 32px;
+
+            padding: 27px;
+
+            border: 1px solid rgba(255, 255, 255, .8);
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.95),
+                    rgba(255,255,255,.72)
+                );
+
+            box-shadow:
+                0 15px 40px rgba(50, 40, 80, .07);
+
+            backdrop-filter: blur(12px);
+
+            -webkit-backdrop-filter: blur(12px);
+
+        }
+
+
+        .profile-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+
+            height: 180px;
+
+            right: -80px;
+
+            top: -90px;
+
+            border-radius: 50%;
+
+            background: rgba(161, 140, 209, .08);
+
+        }
+
+
+        .profile-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+
+        }
+
+
+        .profile-avatar {
+
+            width: 76px;
+
+            height: 76px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 21px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #A18CD1,
+                    #FBC2EB
+                );
+
+            box-shadow:
+                0 10px 25px rgba(161, 140, 209, .25);
+
+            font-size: 30px;
+
+        }
+
+
+        .profile-name {
+
+            margin: 0 0 4px;
+
+            color: #2c2938;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+        }
+
+
+        .profile-id {
+
+            color: #918c9c;
+
+            font-size: 12px;
+
+        }
+
+
+        .profile-details {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            margin-top: 10px;
+
+        }
+
+
+        .detail-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding: 6px 10px;
+
+            border-radius: 8px;
+
+            color: #726d7d;
+
+            background: #f6f3f9;
+
+            font-size: 11px;
+
+        }
+
+
+        .profile-stats {
+
+            position: relative;
+
+            z-index: 2;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 32px;
+
+            margin-left: auto;
+
+        }
+
+
+        .profile-stat {
+
+            min-width: 105px;
+
+        }
+
+
+        .stat-label {
+
+            margin-bottom: 7px;
+
+            color: #9a96a4;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+            letter-spacing: .4px;
+
+        }
+
+
+        .stat-value {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #373344;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+        }
+
+
+        .status-dot {
+
+            width: 8px;
+
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #45b97c;
+
+            box-shadow:
+                0 0 0 4px rgba(69,185,124,.12);
+
+        }
+
+
+        /* =========================================
+           SECTION TITLE
+        ========================================= */
+
+        .section-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 16px;
+
+        }
+
+
+        .section-title {
+
+            margin: 0;
+
+            color: #343040;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+        }
+
+
+        .section-caption {
+
+            color: #aaa5b1;
+
+            font-size: 11px;
+
+        }
+
+
+        /* =========================================
+           ATTENDANCE CARDS
+        ========================================= */
+
+        .attendance-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 32px;
+
+        }
+
+
+        .attendance-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            min-height: 190px;
+
+            padding: 25px;
+
+            border: 1px solid rgba(255,255,255,.85);
+
+            border-radius: 21px;
+
+            background: white;
+
+            box-shadow:
+                0 12px 35px rgba(50,40,80,.06);
+
+            text-decoration: none;
+
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease;
+
+        }
+
+
+        .attendance-card:hover {
+
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 18px 42px rgba(50,40,80,.11);
+
+        }
+
+
+        .attendance-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 130px;
+
+            height: 130px;
+
+            border-radius: 50%;
+
+            right: -45px;
+
+            bottom: -60px;
+
+            background: rgba(161,140,209,.07);
+
+        }
+
+
+        .attendance-icon {
+
+            width: 52px;
+
+            height: 52px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-bottom: 22px;
+
+            border-radius: 15px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #A18CD1,
+                    #FBC2EB
+                );
+
+            font-size: 21px;
+
+        }
+
+
+        .attendance-card.pulang .attendance-icon {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #FBC2EB,
+                    #A18CD1
+                );
+
+        }
+
+
+        .attendance-title {
+
+            margin: 0 0 5px;
+
+            color: #302d3c;
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+        }
+
+
+        .attendance-description {
+
+            margin: 0;
+
+            color: #9a96a4;
+
+            font-size: 11px;
+
+        }
+
+
+        .attendance-arrow {
+
+            position: absolute;
+
+            z-index: 3;
+
+            right: 24px;
+
+            top: 25px;
+
+            width: 34px;
+
+            height: 34px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 10px;
+
+            color: #A18CD1;
+
+            background: #f7f4fa;
+
+        }
+
+
+        /* =========================================
+           OTHER ACTIONS
+        ========================================= */
+
+        .action-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 15px;
+
+        }
+
+
+        .action-card {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 18px;
+
+            border: 1px solid rgba(255,255,255,.9);
+
+            border-radius: 17px;
+
+            color: inherit;
+
+            background: rgba(255,255,255,.8);
+
+            box-shadow:
+                0 8px 25px rgba(50,40,80,.045);
+
+            text-decoration: none;
+
+            transition: .25s ease;
+
+        }
+
+
+        .action-card:hover {
+
+            transform: translateY(-2px);
+
+            border-color: rgba(161,140,209,.2);
+
+            box-shadow:
+                0 12px 30px rgba(50,40,80,.08);
+
+        }
+
+
+        .action-icon {
+
+            width: 43px;
+
+            height: 43px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 12px;
+
+            color: #A18CD1;
+
+            background: #f5f1f9;
+
+            font-size: 18px;
+
+        }
+
+
+        .action-title {
+
+            margin: 0 0 3px;
+
+            color: #373344;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+        }
+
+
+        .action-description {
+
+            margin: 0;
+
+            color: #9a96a4;
+
+            font-size: 10px;
+
+        }
+
+
+        .action-arrow {
+
+            margin-left: auto;
+
+            color: #b0abb8;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .employee-footer {
+
+            margin-top: 45px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid rgba(210,205,218,.6);
+
+            text-align: center;
+
+            color: #aaa5b1;
+
+            font-size: 10px;
+
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 768px) {
+
+            .employee-main {
+
+                padding-top: 30px;
+
+            }
+
+
+            .profile-content {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+
+            }
+
+
+            .profile-stats {
+
+                width: 100%;
+
+                margin-left: 0;
+
+                padding-top: 18px;
+
+                border-top: 1px solid #eeeaf1;
+
+            }
+
+
+            .profile-stat {
+
+                min-width: auto;
+
+                flex: 1;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .employee-navbar .container {
+
+                padding-left: 17px;
+
+                padding-right: 17px;
+
+            }
+
+
+            .employee-main {
+
+                padding-left: 16px;
+
+                padding-right: 16px;
+
+            }
+
+
+            .user-info {
+
+                display: none;
+
+            }
+
+
+            .attendance-grid,
+            .action-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .profile-card {
+
+                padding: 21px;
+
+            }
+
+
+            .profile-avatar {
+
+                width: 64px;
+
+                height: 64px;
+
+                border-radius: 18px;
+
+                font-size: 25px;
+
+            }
+
+
+            .welcome-title {
+
+                font-size: 29px;
+
+            }
+
+        }
+
     </style>
+
 </head>
 
-<body>
 
-<div class="container">
+<body class="employee-page">
 
-    <div class="card">
-        <h2>
-            Halo, {{ person["name"] }}
-        </h2>
 
-        <p>
-            ID: {{ person["person_id"] }}
-        </p>
+<!-- =========================================
+     NAVBAR
+========================================== -->
 
-        <p>
-            Divisi: {{ person["division"] }}
-        </p>
+<nav class="employee-navbar">
 
-        <p>
-           Status Wajah: {{ person["status"] }}
-        </p>
-         
-        <p>
-           Jumlah Dataset: {{ person["dataset_count"] }}
-        </p>
- 
+    <div class="container-fluid px-4">
+
+        <div class="navbar-inner">
+
+
+            <!-- Brand -->
+
+            <a href="/employee"
+               class="brand">
+
+                <div class="brand-icon">
+
+                    <i class="bi bi-camera-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <div class="brand-name">
+
+                        FACE AI
+
+                    </div>
+
+                    <span class="brand-subtitle">
+
+                        Attendance System
+
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- User -->
+
+            <div class="employee-user">
+
+                <div class="user-info">
+
+                    <div class="user-name">
+
+                        {{ person["name"] }}
+
+                    </div>
+
+                    <div class="user-role">
+
+                        Employee
+
+                    </div>
+
+                </div>
+
+
+                <div class="user-avatar">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+
+                <a href="/logout"
+                   class="logout-btn"
+                   title="Logout">
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+        </div>
+
     </div>
 
-    <div class="card menu">
+</nav>
 
-        <a href="/employee/register-face">
-            Registrasi Wajah
-        </a>
 
-        <a href="/employee/attendance/masuk">
-            Absen Masuk
-        </a>
+<!-- =========================================
+     MAIN CONTENT
+========================================== -->
 
-        <a href="/employee/attendance/pulang">
-            Absen Pulang
-        </a>
+<main class="employee-main">
 
-        <a href="/employee/history">
-            Riwayat Absensi
-        </a>
 
-        <a class="logout"
-           href="/logout">
-            Logout
-        </a>
+    <!-- Welcome -->
 
-    </div>
+    <section class="welcome-section">
 
-</div>
+        <div class="welcome-label">
+
+            <i class="bi bi-grid-1x2-fill"></i>
+
+            Employee Dashboard
+
+        </div>
+
+
+        <h1 class="welcome-title">
+
+            Selamat datang,
+            <span>{{ person["name"] }}</span>
+
+        </h1>
+
+
+        <p class="welcome-description">
+
+            Kelola registrasi wajah dan lakukan absensi
+            melalui sistem Face AI.
+
+        </p>
+
+    </section>
+
+
+    <!-- =========================================
+         PROFILE
+    ========================================== -->
+
+    <section class="profile-card">
+
+        <div class="profile-content">
+
+
+            <div class="profile-avatar">
+
+                <i class="bi bi-person-fill"></i>
+
+            </div>
+
+
+            <div>
+
+                <h2 class="profile-name">
+
+                    {{ person["name"] }}
+
+                </h2>
+
+
+                <div class="profile-id">
+
+                    Employee ID:
+                    <strong>{{ person["person_id"] }}</strong>
+
+                </div>
+
+
+                <div class="profile-details">
+
+                    <span class="detail-badge">
+
+                        <i class="bi bi-building"></i>
+
+                        {{ person["division"] }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Stats -->
+
+            <div class="profile-stats">
+
+
+                <div class="profile-stat">
+
+                    <div class="stat-label">
+
+                        Status Wajah
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        <span class="status-dot"></span>
+
+                        {{ person["status"] }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-stat">
+
+                    <div class="stat-label">
+
+                        Dataset
+
+                    </div>
+
+
+                    <div class="stat-value">
+
+                        <i class="bi bi-images"></i>
+
+                        {{ person["dataset_count"] }}
+                        Foto
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         ATTENDANCE
+    ========================================== -->
+
+    <section>
+
+        <div class="section-heading">
+
+            <h2 class="section-title">
+
+                Absensi
+
+            </h2>
+
+
+            <span class="section-caption">
+
+                Verifikasi menggunakan wajah
+
+            </span>
+
+        </div>
+
+
+        <div class="attendance-grid">
+
+
+            <!-- Masuk -->
+
+            <a href="/employee/attendance/masuk"
+               class="attendance-card">
+
+                <div class="attendance-icon">
+
+                    <i class="bi bi-box-arrow-in-right"></i>
+
+                </div>
+
+
+                <h3 class="attendance-title">
+
+                    Absen Masuk
+
+                </h3>
+
+
+                <p class="attendance-description">
+
+                    Lakukan verifikasi wajah untuk
+                    mencatat waktu masuk.
+
+                </p>
+
+
+                <div class="attendance-arrow">
+
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </div>
+
+            </a>
+
+
+            <!-- Pulang -->
+
+            <a href="/employee/attendance/pulang"
+               class="attendance-card pulang">
+
+                <div class="attendance-icon">
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                </div>
+
+
+                <h3 class="attendance-title">
+
+                    Absen Pulang
+
+                </h3>
+
+
+                <p class="attendance-description">
+
+                    Lakukan verifikasi wajah untuk
+                    mencatat waktu pulang.
+
+                </p>
+
+
+                <div class="attendance-arrow">
+
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </div>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         OTHER FEATURES
+    ========================================== -->
+
+    <section>
+
+        <div class="section-heading">
+
+            <h2 class="section-title">
+
+                Fitur Lainnya
+
+            </h2>
+
+
+            <span class="section-caption">
+
+                Kelola akun dan data
+
+            </span>
+
+        </div>
+
+
+        <div class="action-grid">
+
+
+            <!-- Register Face -->
+
+            <a href="/employee/register-face"
+               class="action-card">
+
+
+                <div class="action-icon">
+
+                    <i class="bi bi-person-bounding-box"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3 class="action-title">
+
+                        Registrasi Wajah
+
+                    </h3>
+
+
+                    <p class="action-description">
+
+                        Kelola dan tambahkan dataset wajah.
+
+                    </p>
+
+                </div>
+
+
+                <div class="action-arrow">
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </div>
+
+
+            </a>
+
+
+            <!-- History -->
+
+            <a href="/employee/history"
+               class="action-card">
+
+
+                <div class="action-icon">
+
+                    <i class="bi bi-clock-history"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3 class="action-title">
+
+                        Riwayat Absensi
+
+                    </h3>
+
+
+                    <p class="action-description">
+
+                        Lihat catatan kehadiran Anda.
+
+                    </p>
+
+                </div>
+
+
+                <div class="action-arrow">
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </div>
+
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+
+    <footer class="employee-footer">
+
+        FACE AI Attendance System &copy; 2026
+
+    </footer>
+
+
+</main>
+
+
+<!-- Bootstrap JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
 
 </body>
+
 </html>

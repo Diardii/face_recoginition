@@ -31,6 +31,7 @@ class ChallengeManager:
         self.state = self.STATE_IDLE
         self.started_at = None
         self.match_count = 0
+        self.wrong_count = 0
 
     def start(self, person_id):
         """
@@ -46,6 +47,7 @@ class ChallengeManager:
         self.state = self.STATE_WAITING
         self.started_at = time.time()
         self.match_count = 0
+        self.wrong_count = 0
 
         return self.get_status()
 
@@ -55,6 +57,7 @@ class ChallengeManager:
         self.state = self.STATE_IDLE
         self.started_at = None
         self.match_count = 0
+        self.wrong_count = 0
 
     def process(self, face, person_id):
         """
@@ -106,8 +109,18 @@ class ChallengeManager:
 
         if direction == self.challenge:
             self.match_count += 1
+            self.wrong_count = 0
+
         else:
-            self.match_count = 0
+            self.wrong_count += 1
+
+        if self.wrong_count > 1:
+            self.match_count = max(
+                0,
+                self.match_count -1
+            )
+
+            self.wrong_count = 0
 
         if self.match_count >= self.confirm_frames:
             self.state = self.STATE_PASSED

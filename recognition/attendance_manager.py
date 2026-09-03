@@ -7,6 +7,7 @@ from database.database import (
     save_attendance,
     attendance_exists
 )
+
 from config import (
     ATTENDANCE_COOLDOWN,
     ATTENDANCE_IMAGES_DIR
@@ -55,12 +56,28 @@ class AttendanceManager:
         self,
         person,
         frame=None,
-        attendance_type=None
+        attendance_type=None,
+        latitude=None,
+        longitude=None,
+        accuracy=None,
+        location_name=None
     ):
+        """
+        Menyimpan data absensi beserta informasi lokasi.
+
+        latitude      = latitude GPS
+        longitude     = longitude GPS
+        accuracy      = akurasi GPS dalam meter
+        location_name = nama lokasi/tempat hasil reverse geocoding
+        """
 
         person_id = person.get("person_id")
         person_name = person.get("name")
         confidence = person.get("score", 0)
+
+        # ==========================================
+        # VALIDASI JENIS ABSENSI
+        # ==========================================
 
         if attendance_type not in (
             "Masuk",
@@ -72,9 +89,19 @@ class AttendanceManager:
             )
             return False
 
+        # ==========================================
+        # VALIDASI DATA PERSON
+        # ==========================================
+
         if not person_id or not person_name:
-            print("[ATTENDANCE] Data person tidak lengkap.")
+            print(
+                "[ATTENDANCE] Data person tidak lengkap."
+            )
             return False
+
+        # ==========================================
+        # CEK COOLDOWN
+        # ==========================================
 
         if not self.can_save(
             person_id,
@@ -86,6 +113,10 @@ class AttendanceManager:
             person_id,
             attendance_type
         )
+
+        # ==========================================
+        # CEK ABSENSI HARI INI
+        # ==========================================
 
         if attendance_exists(
             person_id=person_id,
@@ -100,6 +131,10 @@ class AttendanceManager:
             )
             return False
 
+        # ==========================================
+        # SIMPAN FOTO ABSENSI
+        # ==========================================
+
         image_path = None
 
         if frame is not None:
@@ -110,7 +145,9 @@ class AttendanceManager:
             )
 
             filename = (
-                datetime.now().strftime("%Y%m%d_%H%M%S")
+                datetime.now().strftime(
+                    "%Y%m%d_%H%M%S"
+                )
                 + "_"
                 + person_id
                 + "_"
@@ -128,25 +165,80 @@ class AttendanceManager:
             )
 
             if not image_saved:
-                print("[ATTENDANCE] Foto gagal disimpan.")
+
+                print(
+                    "[ATTENDANCE] Foto gagal disimpan."
+                )
+
                 image_path = None
+
+        # ==========================================
+        # TAMPILKAN INFORMASI LOKASI
+        # ==========================================
+
+        print(
+            "[ATTENDANCE] Lokasi:"
+        )
+
+        print(
+            "  Latitude      :",
+            latitude
+        )
+
+        print(
+            "  Longitude     :",
+            longitude
+        )
+
+        print(
+            "  Accuracy      :",
+            accuracy
+        )
+
+        print(
+            "  Location Name :",
+            location_name
+        )
+
+        # ==========================================
+        # SIMPAN ABSENSI KE DATABASE
+        # ==========================================
 
         saved = save_attendance(
             person_id=person_id,
             person_name=person_name,
             attendance_type=attendance_type,
             confidence=confidence,
-            image=image_path
+            image=image_path,
+
+            # DATA GPS
+            latitude=latitude,
+            longitude=longitude,
+            accuracy=accuracy,
+            location_name=location_name
         )
+
+        # ==========================================
+        # JIKA GAGAL SIMPAN
+        # ==========================================
 
         if not saved:
 
-            if image_path and os.path.exists(image_path):
+            if image_path and os.path.exists(
+                image_path
+            ):
+
                 try:
-                    os.remove(image_path)
+
+                    os.remove(
+                        image_path
+                    )
+
                 except OSError as error:
+
                     print(
-                        "[ATTENDANCE] Gagal menghapus foto:",
+                        "[ATTENDANCE] "
+                        "Gagal menghapus foto:",
                         error
                     )
 
@@ -156,13 +248,28 @@ class AttendanceManager:
                     person_id
                 )
             )
+
             return False
 
+        # ==========================================
+        # BERHASIL
+        # ==========================================
+
         print(
-            "[ATTENDANCE] {} ({}) berhasil disimpan sebagai {}.".format(
+            "[ATTENDANCE] "
+            "{} ({}) berhasil disimpan sebagai {}.".format(
                 person_name,
                 person_id,
                 attendance_type
+            )
+        )
+
+        print(
+            "[ATTENDANCE] "
+            "Lokasi tersimpan: {}".format(
+                location_name
+                if location_name
+                else "Tidak tersedia"
             )
         )
 

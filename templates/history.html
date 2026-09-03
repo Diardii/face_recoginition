@@ -2,69 +2,297 @@
 
 {% block content %}
 
-<div class="card shadow">
+<style>
+    .history-card {
+        border: 0;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .history-card .card-header {
+        padding: 18px 20px;
+        background: white;
+        border-bottom: 1px solid #eee;
+    }
+
+    .history-title {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .history-subtitle {
+        margin: 4px 0 0;
+        color: #888;
+        font-size: 13px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .history-table {
+        margin-bottom: 0;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .history-table th {
+        font-size: 12px;
+        color: #666;
+        font-weight: 700;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .history-table td {
+        font-size: 13px;
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+
+    .attendance-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .location-cell {
+        min-width: 280px;
+        white-space: normal;
+    }
+
+    .location-name {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        color: #444;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .location-name i {
+        margin-top: 2px;
+    }
+
+    .coordinates {
+        margin-top: 5px;
+        color: #888;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .accuracy {
+        margin-top: 2px;
+        color: #999;
+        font-size: 11px;
+    }
+
+    .location-unavailable {
+        color: #999;
+        font-style: italic;
+        font-size: 12px;
+    }
+
+    .confidence-value {
+        font-weight: 600;
+    }
+
+    .empty-history {
+        padding: 45px 20px;
+        text-align: center;
+        color: #888;
+    }
+
+    .empty-history i {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 30px;
+    }
+</style>
+
+<div class="card shadow history-card">
 
     <div class="card-header">
 
-        <h4>Riwayat Absensi</h4>
+        <h4 class="history-title">
+            Riwayat Absensi
+        </h4>
 
     </div>
 
-    <div class="card-body">
+    <div class="card-body p-0">
 
-        <table class="table table-striped">
+        {% if attendance %}
 
-            <thead>
+        <div class="table-wrapper">
 
-                <tr>
+            <table class="table table-striped table-hover history-table">
 
-                    <th>ID</th>
+                <thead>
 
-                    <th>Nama</th>
+                    <tr>
 
-                    <th>Jenis</th>
+                        <th>ID</th>
 
-                    <th>Tanggal</th>
+                        <th>Nama</th>
 
-                    <th>Jam</th>
+                        <th>Jenis</th>
 
-                    <th>Confidence</th>
+                        <th>Tanggal</th>
 
-                </tr>
+                        <th>Jam</th>
 
-            </thead>
+                        <th>Confidence</th>
 
-            <tbody>
+                        <th>Lokasi</th>
 
-            {% for row in attendance %}
+                    </tr>
 
-                <tr>
+                </thead>
 
-                    <td>{{ row.person_id }}</td>
+                <tbody>
 
-                    <td>{{ row.person_name }}</td>
+                {% for row in attendance %}
 
-                    <td>{{ row.attendance_type }}</td>
+                    <tr>
 
-                    <td>{{ row.attendance_date }}</td>
+                        <td>
+                            {{ row.person_id }}
+                        </td>
 
-                    <td>{{ row.attendance_time }}</td>
+                        <td>
+                            <strong>
+                                {{ row.person_name }}
+                            </strong>
+                        </td>
 
-                    <td>{{ row.confidence }}%</td>
+                        <td>
 
-                </tr>
+                            {% if row.attendance_type == "Masuk" %}
 
-            {% endfor %}
+                                <span class="attendance-badge bg-success-subtle text-success">
+                                    Masuk
+                                </span>
 
-            </tbody>
+                            {% elif row.attendance_type == "Pulang" %}
 
-        </table>
+                                <span class="attendance-badge bg-warning-subtle text-warning-emphasis">
+                                    Pulang
+                                </span>
+
+                            {% else %}
+
+                                <span class="attendance-badge bg-secondary-subtle text-secondary">
+                                    {{ row.attendance_type }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ row.attendance_date }}
+                        </td>
+
+                        <td>
+                            {{ row.attendance_time }}
+                        </td>
+
+                        <td>
+
+                            <span class="confidence-value">
+                                {{ row.confidence }}%
+                            </span>
+
+                        </td>
+
+                        <td class="location-cell">
+
+                            {% if row.location_name %}
+
+                                <div class="location-name">
+
+                                    <i class="bi bi-geo-alt-fill"></i>
+
+                                    <span>
+                                        {{ row.location_name }}
+                                    </span>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="location-unavailable">
+                                    Lokasi tidak tersedia
+                                </div>
+
+                            {% endif %}
+
+
+                            {% if row.latitude is not none and row.longitude is not none %}
+
+                                <div class="coordinates">
+
+                                    <strong>
+                                        Koordinat:
+                                    </strong>
+
+                                    {{ "%.6f"|format(row.latitude|float) }},
+                                    {{ "%.6f"|format(row.longitude|float) }}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            {% if row.accuracy is not none %}
+
+                                <div class="accuracy">
+
+                                    Akurasi GPS:
+                                    {{ "%.1f"|format(row.accuracy|float) }}
+                                    meter
+
+                                </div>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+            <div class="empty-history">
+
+                <i class="bi bi-calendar-x"></i>
+
+                <div>
+                    Belum ada riwayat absensi.
+                </div>
+
+            </div>
+
+        {% endif %}
 
     </div>
 
 </div>
 
 {% endblock %}
+
 {% block scripts %}
+
 <script src="{{ url_for('static', filename='js/history.js') }}"></script>
+
 {% endblock %}

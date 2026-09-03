@@ -15,7 +15,7 @@ function getCameraSetting(){
             device: null,
             resolution: "1280x720",
             fps: 30,
-            mirror: true
+            mirror: false
         };
 
     }
