@@ -165,8 +165,17 @@ def login():
 
     if request.method == "GET":
 
+        success_message = None
+
+        if request.args.get("reset") == "success":
+
+            success_message = (
+                "Password berhasil diubah. Silakan login."
+            )
+
         return render_template(
-            "login.html"
+            "login.html",
+            success=success_message
         )
 
 
@@ -355,9 +364,11 @@ def reset_password(token):
     )
 
 
-    return render_template(
-        "login.html",
-        success="Password berhasil diubah. Silakan login."
+    return redirect(
+        url_for(
+            "login",
+            reset="success"
+        )
     )
 
 
