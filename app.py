@@ -206,6 +206,13 @@ def login():
         session["person_id"] = user["person_id"]
 
 
+        if not user["email"]:
+
+            return redirect(
+                url_for("complete_email")
+            )
+
+
         if user["role"] == "admin":
 
             return redirect(
@@ -223,6 +230,68 @@ def login():
         "login.html",
         error="Username atau password salah."
     )
+
+
+@app.route("/complete-email", methods=["GET", "POST"])
+@login_required
+def complete_email():
+
+    user = get_user_by_username(
+        session["username"]
+    )
+
+    # Kalau ternyata sudah ada email
+    # (misal buka lagi via back button),
+    # langsung lempar ke halaman utama.
+    if user and user["email"]:
+
+        if user["role"] == "admin":
+            return redirect(url_for("dashboard"))
+
+        return redirect(url_for("employee_home"))
+
+
+    if request.method == "GET":
+
+        return render_template(
+            "complete_email.html"
+        )
+
+
+    email = request.form.get(
+        "email",
+        ""
+    ).strip()
+
+
+    if not email or "@" not in email:
+
+        return render_template(
+            "complete_email.html",
+            error="Masukkan alamat email yang valid."
+        )
+
+
+    existing = get_user_by_email(email)
+
+    if existing and existing["id"] != user["id"]:
+
+        return render_template(
+            "complete_email.html",
+            error="Email ini sudah digunakan akun lain."
+        )
+
+
+    update_user_email(
+        user["id"],
+        email
+    )
+
+
+    if user["role"] == "admin":
+        return redirect(url_for("dashboard"))
+
+    return redirect(url_for("employee_home"))
 
 
 @app.route("/forgot-password", methods=["GET", "POST"])
