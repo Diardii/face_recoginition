@@ -228,8 +228,19 @@ def forgot_password():
 
     if request.method == "GET":
 
+        success_message = None
+
+        if request.args.get("sent") == "1":
+
+            success_message = (
+                "Jika email tersebut terdaftar di sistem, "
+                "link reset password sudah kami kirim. "
+                "Silakan cek inbox (atau folder spam) Anda."
+            )
+
         return render_template(
-            "forgot_password.html"
+            "forgot_password.html",
+            success=success_message
         )
 
 
@@ -237,16 +248,6 @@ def forgot_password():
         "email",
         ""
     ).strip()
-
-
-    # Pesan ini SENGAJA sama untuk semua kondisi
-    # (email ada / tidak ada) supaya tidak bocor
-    # informasi email mana saja yang terdaftar.
-    generic_message = (
-        "Jika email tersebut terdaftar di sistem, "
-        "link reset password sudah kami kirim. "
-        "Silakan cek inbox (atau folder spam) Anda."
-    )
 
 
     user = get_user_by_email(email)
@@ -276,9 +277,13 @@ def forgot_password():
         )
 
 
-    return render_template(
-        "forgot_password.html",
-        success=generic_message
+    # Redirect (bukan render langsung) supaya refresh
+    # halaman ini tidak mengirim ulang form / email.
+    return redirect(
+        url_for(
+            "forgot_password",
+            sent="1"
+        )
     )
 
 
