@@ -16,6 +16,9 @@ const personGender =
 const personDivision =
     document.getElementById("personDivision");
 
+const personEmail =
+    document.getElementById("personEmail");
+
 const personUsername =
     document.getElementById("personUsername");
 
@@ -101,6 +104,20 @@ async function savePerson() {
     }
 
     if (
+        personEmail.value.trim() === ""
+    ) {
+        alert("Email belum diisi.");
+        return;
+    }
+
+    if (
+        !personEmail.value.includes("@")
+    ) {
+        alert("Format email tidak valid.");
+        return;
+    }
+
+    if (
         personUsername.value.trim() === ""
     ) {
         alert("Username belum diisi.");
@@ -143,6 +160,9 @@ async function savePerson() {
 
                         division:
                             personDivision.value.trim(),
+
+                        email:
+                            personEmail.value.trim(),
 
                         username:
                             personUsername.value.trim(),
@@ -213,6 +233,7 @@ function resetForm() {
 
     personName.value = "";
     personDivision.value = "";
+    personEmail.value = "";
     personUsername.value = "";
     personPassword.value = "";
     personGender.selectedIndex = 0;

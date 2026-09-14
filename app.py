@@ -55,10 +55,12 @@ from database.database import (
     attendance_exists,
     verify_user_password,
     get_user_by_email,
+    get_user_by_person_id,
     set_reset_token,
     get_user_by_reset_token,
     clear_reset_token,
-    update_user_password
+    update_user_password,
+    update_user_email
 )
 
 from recognition.stream import (
@@ -1407,6 +1409,35 @@ def update_person_route(person_id):
 
     )
 
+
+    # ========================================================
+    # UPDATE EMAIL AKUN (jika field email dikirim)
+    # ========================================================
+
+    email = str(
+        data.get("email", "")
+    ).strip()
+
+    if email:
+
+        existing = get_user_by_email(email)
+
+        user = get_user_by_person_id(person_id)
+
+        if existing and user and existing["id"] != user["id"]:
+
+            return jsonify({
+                "status": "error",
+                "message": "Email sudah digunakan akun lain."
+            })
+
+        if user:
+
+            update_user_email(
+                user["id"],
+                email
+            )
+
     return jsonify({
 
         "status":"success"
@@ -1672,6 +1703,7 @@ def admin_create_person():
         division = str(data.get("division", "")).strip()
         username = str(data.get("username", "")).strip()
         password = str(data.get("password", "")).strip()
+        email = str(data.get("email", "")).strip()
 
         if not person_id:
             return jsonify({
@@ -1697,6 +1729,18 @@ def admin_create_person():
                 "message": "Password belum diisi."
             }), 400
 
+        if not email:
+            return jsonify({
+                "status": "error",
+                "message": "Email belum diisi."
+            }), 400
+
+        if get_user_by_email(email):
+            return jsonify({
+                "status": "error",
+                "message": "Email sudah digunakan akun lain."
+            }), 400
+
         save_person(
             person_id,
             name,
@@ -1709,7 +1753,8 @@ def admin_create_person():
             username=username,
             password=password,
             role="employee",
-            person_id=person_id
+            person_id=person_id,
+            email=email
         )
 
         return jsonify({
@@ -1736,11 +1781,21 @@ def person_edit(person_id):
 
                 return "Person Not Found", 404
 
+            account = get_user_by_person_id(person_id)
+
+            account_email = (
+                account["email"]
+                if account and account["email"]
+                else ""
+            )
+
             return render_template(
 
                 "person_edit.html",
 
-                person=person
+                person=person,
+
+                account_email=account_email
 
             )
 @app.route("/person/<person_id>")
