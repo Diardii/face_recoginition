@@ -3,7 +3,10 @@ from flask import Flask, render_template
 import os
 import base64
 import shutil
+import secrets
+from datetime import datetime, timedelta
 import numpy as np
+from mailer import send_reset_email
 from training.train import train_all
 from recognition.stream import reload_embeddings
 from recognition.dashboard_state import dashboard_state
@@ -50,7 +53,12 @@ from database.database import (
     get_user_by_username,
     get_db,
     attendance_exists,
-    verify_user_password
+    verify_user_password,
+    get_user_by_email,
+    set_reset_token,
+    get_user_by_reset_token,
+    clear_reset_token,
+    update_user_password
 )
 
 from recognition.stream import (
@@ -64,7 +72,9 @@ from config import (
     FLASK_PORT,
     FLASK_DEBUG,
     FLASK_THREADED,
-    YUNET_MODEL_PATH
+    YUNET_MODEL_PATH,
+    APP_BASE_URL,
+    RESET_TOKEN_EXPIRY_MINUTES
 )
 
 from training.dataset_validator import DatasetValidator
@@ -202,6 +212,154 @@ def login():
         "login.html",
         error="Username atau password salah."
     )
+
+
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+
+    if request.method == "GET":
+
+        return render_template(
+            "forgot_password.html"
+        )
+
+
+    email = request.form.get(
+        "email",
+        ""
+    ).strip()
+
+
+    # Pesan ini SENGAJA sama untuk semua kondisi
+    # (email ada / tidak ada) supaya tidak bocor
+    # informasi email mana saja yang terdaftar.
+    generic_message = (
+        "Jika email tersebut terdaftar di sistem, "
+        "link reset password sudah kami kirim. "
+        "Silakan cek inbox (atau folder spam) Anda."
+    )
+
+
+    user = get_user_by_email(email)
+
+    if user:
+
+        token = secrets.token_urlsafe(32)
+
+        expires_at = (
+            datetime.now()
+            + timedelta(minutes=RESET_TOKEN_EXPIRY_MINUTES)
+        ).isoformat()
+
+        set_reset_token(
+            user["id"],
+            token,
+            expires_at
+        )
+
+        reset_link = (
+            f"{APP_BASE_URL}/reset-password/{token}"
+        )
+
+        send_reset_email(
+            email,
+            reset_link
+        )
+
+
+    return render_template(
+        "forgot_password.html",
+        success=generic_message
+    )
+
+
+@app.route(
+    "/reset-password/<token>",
+    methods=["GET", "POST"]
+)
+def reset_password(token):
+
+    user = get_user_by_reset_token(token)
+
+
+    def token_is_valid(user):
+
+        if user is None:
+            return False
+
+        expiry = user["reset_token_expiry"]
+
+        if not expiry:
+            return False
+
+        try:
+            expires_at = datetime.fromisoformat(expiry)
+        except ValueError:
+            return False
+
+        return datetime.now() < expires_at
+
+
+    if not token_is_valid(user):
+
+        return render_template(
+            "reset_password.html",
+            invalid_token=True
+        )
+
+
+    if request.method == "GET":
+
+        return render_template(
+            "reset_password.html",
+            token=token
+        )
+
+
+    new_password = request.form.get(
+        "password",
+        ""
+    )
+
+    confirm_password = request.form.get(
+        "confirm_password",
+        ""
+    )
+
+
+    if len(new_password) < 6:
+
+        return render_template(
+            "reset_password.html",
+            token=token,
+            error="Password minimal 6 karakter."
+        )
+
+
+    if new_password != confirm_password:
+
+        return render_template(
+            "reset_password.html",
+            token=token,
+            error="Konfirmasi password tidak cocok."
+        )
+
+
+    update_user_password(
+        user["id"],
+        new_password
+    )
+
+    clear_reset_token(
+        user["id"]
+    )
+
+
+    return render_template(
+        "login.html",
+        success="Password berhasil diubah. Silakan login."
+    )
+
 
 @app.route("/employee")
 @login_required
@@ -1738,4 +1896,3 @@ if __name__ == "__main__":
             "cert/server.key"
         )
 )
- 

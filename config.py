@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 
@@ -90,3 +91,51 @@ FLASK_THREADED = True
 HEAD_TURN_THRESHOLD = 0.18
 LIVENESS_CHALLENGE_TIMEOUT = 8
 LIVENESS_CONFIRM_FRAMES = 2
+
+
+# ==================================================
+# Forgot password / email
+#
+# MAIL_USERNAME dan MAIL_PASSWORD JANGAN di-commit.
+# Set lewat environment variable di server, misal
+# via systemd "Environment=" atau file .env yang
+# di-source sebelum menjalankan app.
+#
+# Untuk Gmail, MAIL_PASSWORD harus App Password
+# (bukan password akun biasa), dibuat di:
+# https://myaccount.google.com/apppasswords
+# ==================================================
+
+MAIL_SERVER = os.environ.get(
+    "MAIL_SERVER",
+    "smtp.gmail.com"
+)
+
+MAIL_PORT = int(
+    os.environ.get("MAIL_PORT", 587)
+)
+
+MAIL_USERNAME = os.environ.get(
+    "MAIL_USERNAME",
+    ""
+)
+
+MAIL_PASSWORD = os.environ.get(
+    "MAIL_PASSWORD",
+    ""
+)
+
+MAIL_FROM_NAME = os.environ.get(
+    "MAIL_FROM_NAME",
+    "Face AI Attendance"
+)
+
+# Dipakai untuk membangun link reset password,
+# contoh: "https://202.169.232.239:2026"
+# Ganti sesuai environment (lokal vs server).
+APP_BASE_URL = os.environ.get(
+    "APP_BASE_URL",
+    "https://127.0.0.1:5000"
+)
+
+RESET_TOKEN_EXPIRY_MINUTES = 30
