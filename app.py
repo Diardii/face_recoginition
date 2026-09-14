@@ -1393,6 +1393,7 @@ def add_dataset(person_id):
         }), 500
 
 @app.route("/person/<person_id>/update", methods=["POST"])
+@admin_required
 def update_person_route(person_id):
 
     data = request.get_json()
@@ -1469,6 +1470,7 @@ def delete_dataset_image(person_id, filename):
     })
 
 @app.route("/save_person", methods=["POST"])
+@admin_required
 def save_person_route():
 
     try:
@@ -1687,6 +1689,7 @@ def save_person_route():
         }), 500
 
 @app.route("/admin/person/create", methods=["POST"])
+@admin_required
 def admin_create_person():
     try:
         data = request.get_json(silent=True)
