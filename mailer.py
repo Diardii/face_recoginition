@@ -50,21 +50,36 @@ Terima kasih and have a nice day (..◜ᴗ◝..)
             MAIL_SERVER,
             MAIL_PORT
         ) as server:
+
+            server.set_debuglevel(1)
+
             server.starttls()
             server.login(
                 MAIL_USERNAME,
                 MAIL_PASSWORD
             )
-            server.sendmail(
+            send_result = server.sendmail(
                 MAIL_USERNAME,
                 to_email,
                 message.as_string()
             )
+
+            print(
+                "[MAILER] sendmail() selesai. "
+                "Refused recipients (kosong = diterima server):",
+                send_result
+            )
+
+        print(
+            f"[MAILER] Email ke {to_email} "
+            "berhasil dikirim ke server SMTP."
+        )
+
         return True
 
     except Exception as error:
         print(
             "[MAILER ERROR]",
-            error
+            repr(error)
         )
         return False
