@@ -3,10 +3,7 @@ from flask import Flask, render_template
 import os
 import base64
 import shutil
-import secrets
-from datetime import datetime, timedelta
 import numpy as np
-from mailer import send_reset_email
 from training.train import train_all
 from recognition.stream import reload_embeddings
 from recognition.dashboard_state import dashboard_state
@@ -53,14 +50,7 @@ from database.database import (
     get_user_by_username,
     get_db,
     attendance_exists,
-    verify_user_password,
-    get_user_by_email,
-    get_user_by_person_id,
-    set_reset_token,
-    get_user_by_reset_token,
-    clear_reset_token,
-    update_user_password,
-    update_user_email
+    verify_user_password
 )
 
 from recognition.stream import (
@@ -74,9 +64,7 @@ from config import (
     FLASK_PORT,
     FLASK_DEBUG,
     FLASK_THREADED,
-    YUNET_MODEL_PATH,
-    APP_BASE_URL,
-    RESET_TOKEN_EXPIRY_MINUTES
+    YUNET_MODEL_PATH
 )
 
 from training.dataset_validator import DatasetValidator
@@ -167,17 +155,8 @@ def login():
 
     if request.method == "GET":
 
-        success_message = None
-
-        if request.args.get("reset") == "success":
-
-            success_message = (
-                "Password berhasil diubah. Silakan login."
-            )
-
         return render_template(
-            "login.html",
-            success=success_message
+            "login.html"
         )
 
 
@@ -206,13 +185,6 @@ def login():
         session["person_id"] = user["person_id"]
 
 
-        if not user["email"]:
-
-            return redirect(
-                url_for("complete_email")
-            )
-
-
         if user["role"] == "admin":
 
             return redirect(
@@ -230,223 +202,6 @@ def login():
         "login.html",
         error="Username atau password salah."
     )
-
-
-@app.route("/complete-email", methods=["GET", "POST"])
-@login_required
-def complete_email():
-
-    user = get_user_by_username(
-        session["username"]
-    )
-
-    # Kalau ternyata sudah ada email
-    # (misal buka lagi via back button),
-    # langsung lempar ke halaman utama.
-    if user and user["email"]:
-
-        if user["role"] == "admin":
-            return redirect(url_for("dashboard"))
-
-        return redirect(url_for("employee_home"))
-
-
-    if request.method == "GET":
-
-        return render_template(
-            "complete_email.html"
-        )
-
-
-    email = request.form.get(
-        "email",
-        ""
-    ).strip()
-
-
-    if not email or "@" not in email:
-
-        return render_template(
-            "complete_email.html",
-            error="Masukkan alamat email yang valid."
-        )
-
-
-    existing = get_user_by_email(email)
-
-    if existing and existing["id"] != user["id"]:
-
-        return render_template(
-            "complete_email.html",
-            error="Email ini sudah digunakan akun lain."
-        )
-
-
-    update_user_email(
-        user["id"],
-        email
-    )
-
-
-    if user["role"] == "admin":
-        return redirect(url_for("dashboard"))
-
-    return redirect(url_for("employee_home"))
-
-
-@app.route("/forgot-password", methods=["GET", "POST"])
-def forgot_password():
-
-    if request.method == "GET":
-
-        success_message = None
-
-        if request.args.get("sent") == "1":
-
-            success_message = (
-                "Jika email tersebut terdaftar di sistem, "
-                "link reset password sudah kami kirim. "
-                "Silakan cek inbox (atau folder spam) Anda."
-            )
-
-        return render_template(
-            "forgot_password.html",
-            success=success_message
-        )
-
-
-    email = request.form.get(
-        "email",
-        ""
-    ).strip()
-
-
-    user = get_user_by_email(email)
-
-    if user:
-
-        token = secrets.token_urlsafe(32)
-
-        expires_at = (
-            datetime.now()
-            + timedelta(minutes=RESET_TOKEN_EXPIRY_MINUTES)
-        ).isoformat()
-
-        set_reset_token(
-            user["id"],
-            token,
-            expires_at
-        )
-
-        reset_link = (
-            f"{APP_BASE_URL}/reset-password/{token}"
-        )
-
-        send_reset_email(
-            email,
-            reset_link
-        )
-
-
-    # Redirect (bukan render langsung) supaya refresh
-    # halaman ini tidak mengirim ulang form / email.
-    return redirect(
-        url_for(
-            "forgot_password",
-            sent="1"
-        )
-    )
-
-
-@app.route(
-    "/reset-password/<token>",
-    methods=["GET", "POST"]
-)
-def reset_password(token):
-
-    user = get_user_by_reset_token(token)
-
-
-    def token_is_valid(user):
-
-        if user is None:
-            return False
-
-        expiry = user["reset_token_expiry"]
-
-        if not expiry:
-            return False
-
-        try:
-            expires_at = datetime.fromisoformat(expiry)
-        except ValueError:
-            return False
-
-        return datetime.now() < expires_at
-
-
-    if not token_is_valid(user):
-
-        return render_template(
-            "reset_password.html",
-            invalid_token=True
-        )
-
-
-    if request.method == "GET":
-
-        return render_template(
-            "reset_password.html",
-            token=token
-        )
-
-
-    new_password = request.form.get(
-        "password",
-        ""
-    )
-
-    confirm_password = request.form.get(
-        "confirm_password",
-        ""
-    )
-
-
-    if len(new_password) < 6:
-
-        return render_template(
-            "reset_password.html",
-            token=token,
-            error="Password minimal 6 karakter."
-        )
-
-
-    if new_password != confirm_password:
-
-        return render_template(
-            "reset_password.html",
-            token=token,
-            error="Konfirmasi password tidak cocok."
-        )
-
-
-    update_user_password(
-        user["id"],
-        new_password
-    )
-
-    clear_reset_token(
-        user["id"]
-    )
-
-
-    return redirect(
-        url_for(
-            "login",
-            reset="success"
-        )
-    )
-
 
 @app.route("/employee")
 @login_required
@@ -1479,35 +1234,6 @@ def update_person_route(person_id):
 
     )
 
-
-    # ========================================================
-    # UPDATE EMAIL AKUN (jika field email dikirim)
-    # ========================================================
-
-    email = str(
-        data.get("email", "")
-    ).strip()
-
-    if email:
-
-        existing = get_user_by_email(email)
-
-        user = get_user_by_person_id(person_id)
-
-        if existing and user and existing["id"] != user["id"]:
-
-            return jsonify({
-                "status": "error",
-                "message": "Email sudah digunakan akun lain."
-            })
-
-        if user:
-
-            update_user_email(
-                user["id"],
-                email
-            )
-
     return jsonify({
 
         "status":"success"
@@ -1775,7 +1501,6 @@ def admin_create_person():
         division = str(data.get("division", "")).strip()
         username = str(data.get("username", "")).strip()
         password = str(data.get("password", "")).strip()
-        email = str(data.get("email", "")).strip()
 
         if not person_id:
             return jsonify({
@@ -1801,18 +1526,6 @@ def admin_create_person():
                 "message": "Password belum diisi."
             }), 400
 
-        if not email:
-            return jsonify({
-                "status": "error",
-                "message": "Email belum diisi."
-            }), 400
-
-        if get_user_by_email(email):
-            return jsonify({
-                "status": "error",
-                "message": "Email sudah digunakan akun lain."
-            }), 400
-
         save_person(
             person_id,
             name,
@@ -1825,8 +1538,7 @@ def admin_create_person():
             username=username,
             password=password,
             role="employee",
-            person_id=person_id,
-            email=email
+            person_id=person_id
         )
 
         return jsonify({
@@ -1853,21 +1565,11 @@ def person_edit(person_id):
 
                 return "Person Not Found", 404
 
-            account = get_user_by_person_id(person_id)
-
-            account_email = (
-                account["email"]
-                if account and account["email"]
-                else ""
-            )
-
             return render_template(
 
                 "person_edit.html",
 
-                person=person,
-
-                account_email=account_email
+                person=person
 
             )
 @app.route("/person/<person_id>")

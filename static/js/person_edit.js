@@ -12,23 +12,13 @@ async function savePerson() {
 
         gender: document.getElementById("personGender").value,
 
-        division: document.getElementById("personDivision").value.trim(),
-
-        email: document.getElementById("personEmail").value.trim()
+        division: document.getElementById("personDivision").value.trim()
 
     };
 
     if (data.name === "") {
 
         alert("Nama tidak boleh kosong.");
-
-        return;
-
-    }
-
-    if (data.email !== "" && !data.email.includes("@")) {
-
-        alert("Format email tidak valid.");
 
         return;
 
